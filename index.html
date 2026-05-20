@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vectrasource — Kerala's AI Productivity Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --bg2: #111111;
+    --bg3: #161616;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.2);
+    --text: #F0EDE8;
+    --text-mid: #9A9590;
+    --text-dim: #555;
+    --white: #ffffff;
+
+    /* Product colors */
+    --vakeel: #1D9E75;
+    --vakeel-glow: rgba(29,158,117,0.15);
+    --vlog: #FF3B3B;
+    --vlog-glow: rgba(255,59,59,0.15);
+    --cadesk: #3B82F6;
+    --cadesk-glow: rgba(59,130,246,0.15);
+    --tutor: #F97316;
+    --tutor-glow: rgba(249,115,22,0.15);
+
+    --gold: #C9A84C;
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 900;
+    color: var(--white); letter-spacing: -0.5px;
+  }
+  .nav-brand span {
+    background: linear-gradient(135deg, var(--gold), #E8C97A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a {
+    font-size: 13px; color: var(--text-mid);
+    text-decoration: none; transition: color 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--white); color: var(--bg) !important;
+    padding: 8px 20px; border-radius: 30px;
+    font-weight: 500 !important; font-size: 13px !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85 !important; color: var(--bg) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative; z-index: 1;
+  }
+
+  /* ANIMATED GRID BG */
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* GLOW ORBS */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; opacity: 0.3;
+  }
+  .orb-1 { width: 500px; height: 500px; background: var(--vakeel); top: 10%; left: -10%; animation: float1 8s ease-in-out infinite; }
+  .orb-2 { width: 400px; height: 400px; background: var(--vlog); top: 20%; right: -5%; animation: float2 10s ease-in-out infinite; }
+  .orb-3 { width: 300px; height: 300px; background: var(--cadesk); bottom: 20%; left: 20%; animation: float3 9s ease-in-out infinite; }
+
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,40px)} }
+  @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 6px 16px; border-radius: 30px;
+    background: rgba(201,168,76,0.05);
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-eyebrow::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900; line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  h1 .line1 { display: block; color: var(--white); }
+  h1 .line2 {
+    display: block;
+    background: linear-gradient(135deg, var(--gold) 0%, #E8C97A 50%, var(--gold) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px; color: var(--text-mid);
+    line-height: 1.7; max-width: 560px;
+    margin: 0 auto 3rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-ctas {
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+    margin-bottom: 5rem;
+  }
+  .btn-primary {
+    background: var(--white); color: var(--bg);
+    padding: 14px 32px; border-radius: 30px;
+    font-size: 14px; font-weight: 500;
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: none; cursor: pointer;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
+  .btn-secondary {
+    background: transparent; color: var(--text-mid);
+    padding: 14px 32px; border-radius: 30px;
+    font-size: 14px; font-weight: 400;
+    text-decoration: none; letter-spacing: 0.3px;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--border-hover); color: var(--white); }
+
+  /* STATS */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 4rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 900; color: var(--white);
+    display: block;
+  }
+  .stat-label { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  /* SECTION COMMON */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900; color: var(--white);
+    line-height: 1.1; letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub { font-size: 15px; color: var(--text-mid); line-height: 1.7; max-width: 500px; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 0 3rem;
+  }
+
+  /* PRODUCTS SECTION */
+  .products-section { padding: 8rem 2rem; }
+  .products-header { text-align: center; margin-bottom: 5rem; }
+  .products-header .section-label { justify-content: center; }
+  .products-header .section-label::before { display: none; }
+  .products-header .section-sub { margin: 0 auto; }
+
+  .products-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 768px) { .products-grid { grid-template-columns: 1fr; } }
+
+  .product-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .product-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.3s;
+    border-radius: var(--radius-lg);
+  }
+  .product-card:hover { transform: translateY(-4px); border-color: var(--border-hover); }
+
+  /* Product specific colors */
+  .card-vakeel::before { background: var(--vakeel-glow); }
+  .card-vakeel:hover::before { opacity: 1; }
+  .card-vakeel:hover { border-color: rgba(29,158,117,0.4); box-shadow: 0 20px 60px var(--vakeel-glow); }
+
+  .card-vlog::before { background: var(--vlog-glow); }
+  .card-vlog:hover::before { opacity: 1; }
+  .card-vlog:hover { border-color: rgba(255,59,59,0.4); box-shadow: 0 20px 60px var(--vlog-glow); }
+
+  .card-cadesk::before { background: var(--cadesk-glow); }
+  .card-cadesk:hover::before { opacity: 1; }
+  .card-cadesk:hover { border-color: rgba(59,130,246,0.4); box-shadow: 0 20px 60px var(--cadesk-glow); }
+
+  .card-tutor::before { background: var(--tutor-glow); }
+  .card-tutor:hover::before { opacity: 1; }
+  .card-tutor:hover { border-color: rgba(249,115,22,0.4); box-shadow: 0 20px 60px var(--tutor-glow); }
+
+  .card-top {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .card-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .icon-vakeel { background: rgba(29,158,117,0.15); }
+  .icon-vlog { background: rgba(255,59,59,0.15); }
+  .icon-cadesk { background: rgba(59,130,246,0.15); }
+  .icon-tutor { background: rgba(249,115,22,0.15); }
+
+  .card-badge {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px; font-weight: 600;
+  }
+  .badge-vakeel { background: rgba(29,158,117,0.15); color: var(--vakeel); border: 1px solid rgba(29,158,117,0.3); }
+  .badge-vlog { background: rgba(255,59,59,0.15); color: var(--vlog); border: 1px solid rgba(255,59,59,0.3); }
+  .badge-cadesk { background: rgba(59,130,246,0.15); color: var(--cadesk); border: 1px solid rgba(59,130,246,0.3); }
+  .badge-tutor { background: rgba(249,115,22,0.15); color: var(--tutor); border: 1px solid rgba(249,115,22,0.3); }
+
+  .card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900;
+    color: var(--white); margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+    letter-spacing: -0.5px;
+  }
+  .card-tagline {
+    font-size: 13px; color: var(--text-mid);
+    margin-bottom: 1.5rem; line-height: 1.6;
+    position: relative; z-index: 1;
+  }
+
+  .card-features {
+    list-style: none;
+    margin-bottom: 2rem;
+    position: relative; z-index: 1;
+  }
+  .card-features li {
+    font-size: 13px; color: var(--text-mid);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-features li:last-child { border-bottom: none; }
+  .card-features li::before { content: '→'; font-size: 11px; }
+  .feat-vakeel::before { color: var(--vakeel) !important; }
+  .feat-vlog::before { color: var(--vlog) !important; }
+  .feat-cadesk::before { color: var(--cadesk) !important; }
+  .feat-tutor::before { color: var(--tutor) !important; }
+
+  .card-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: 30px;
+    transition: all 0.2s;
+    position: relative; z-index: 1;
+    text-decoration: none;
+  }
+  .cta-vakeel { background: rgba(29,158,117,0.15); color: var(--vakeel); border: 1px solid rgba(29,158,117,0.3); }
+  .cta-vakeel:hover { background: var(--vakeel); color: var(--white); }
+  .cta-vlog { background: rgba(255,59,59,0.15); color: var(--vlog); border: 1px solid rgba(255,59,59,0.3); }
+  .cta-vlog:hover { background: var(--vlog); color: var(--white); }
+  .cta-cadesk { background: rgba(59,130,246,0.15); color: var(--cadesk); border: 1px solid rgba(59,130,246,0.3); }
+  .cta-cadesk:hover { background: var(--cadesk); color: var(--white); }
+  .cta-tutor { background: rgba(249,115,22,0.15); color: var(--tutor); border: 1px solid rgba(249,115,22,0.3); }
+  .cta-tutor:hover { background: var(--tutor); color: var(--white); }
+
+  /* WHY SECTION */
+  .why-section {
+    padding: 8rem 2rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .why-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+  }
+  @media (max-width: 768px) { .why-inner { grid-template-columns: 1fr; gap: 3rem; } }
+
+  .why-points { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+  .why-point {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.25rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+  .why-point:hover { border-color: var(--border-hover); }
+  .why-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 900;
+    color: var(--gold); flex-shrink: 0; line-height: 1;
+  }
+  .why-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 4px; }
+  .why-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+
+  .why-visual {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .why-card-stack { position: relative; width: 100%; max-width: 320px; margin: 0 auto; }
+  .stack-card {
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+  }
+  .stack-card-back {
+    position: absolute; top: -16px; left: 16px; right: -16px;
+    height: 100%; background: var(--bg2);
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    z-index: -1;
+  }
+  .stack-card-back2 {
+    position: absolute; top: -28px; left: 28px; right: -28px;
+    height: 100%; background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.04); border-radius: var(--radius-lg);
+    z-index: -2;
+  }
+  .stack-label { font-size: 11px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
+  .stack-products { display: flex; flex-direction: column; gap: 10px; }
+  .stack-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg2); border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .stack-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .stack-item-name { font-size: 13px; color: var(--white); font-weight: 500; flex: 1; }
+  .stack-item-tag { font-size: 10px; color: var(--text-dim); }
+
+  /* COMING SOON */
+  .coming-section { padding: 6rem 2rem; }
+  .coming-inner { max-width: 1100px; margin: 0 auto; }
+  .coming-header { margin-bottom: 3rem; }
+  .coming-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  @media (max-width: 768px) { .coming-grid { grid-template-columns: 1fr; } }
+
+  .coming-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .coming-card::after {
+    content: 'SOON';
+    position: absolute; top: 14px; right: 14px;
+    font-size: 9px; letter-spacing: 2px;
+    background: rgba(255,255,255,0.05); color: var(--text-dim);
+    padding: 3px 8px; border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+  .coming-emoji { font-size: 28px; margin-bottom: 1rem; display: block; }
+  .coming-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+  .coming-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    padding: 4rem 3rem 3rem;
+    border-top: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 2rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900; color: var(--white);
+  }
+  .footer-brand span {
+    background: linear-gradient(135deg, var(--gold), #E8C97A);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .footer-tagline { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+  .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE NAV */
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    h1 { letter-spacing: -2px; }
+    .stats-bar { gap: 2rem; }
+    .products-section { padding: 5rem 1.5rem; }
+    .why-section { padding: 5rem 1.5rem; }
+    .coming-section { padding: 5rem 1.5rem; }
+    footer { padding: 3rem 1.5rem 2rem; }
+    .footer-inner { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Vectra<span>source</span></div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#why">Why Us</a>
+    <a href="#coming">Roadmap</a>
+    <a href="#products" class="nav-cta">Explore Tools →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-eyebrow">Kerala's First AI Productivity Suite</div>
+
+  <h1>
+    <span class="line1">AI tools built</span>
+    <span class="line2">for India</span>
+  </h1>
+
+  <p class="hero-sub">
+    A suite of intelligent tools for Kerala's lawyers, creators, accountants, and teachers — built in Malayalam, designed for India.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#products" class="btn-primary">Explore All Tools</a>
+    <a href="#why" class="btn-secondary">Why Vectrasource?</a>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-num">4</span>
+      <span class="stat-label">AI Products</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5</span>
+      <span class="stat-label">Languages</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Possibilities</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="products-header fade-up">
+    <div class="section-label">Our Products</div>
+    <h2 class="section-title">Four tools.<br/>One suite.</h2>
+    <p class="section-sub">Each product built for a specific profession, in the language they work in every day.</p>
+  </div>
+
+  <div class="products-grid">
+
+    <!-- Vakeel AI -->
+    <div class="product-card card-vakeel fade-up" onclick="window.open('https://vakeel-ai-eta.vercel.app/','_blank')">
+      <div class="card-top">
+        <div class="card-icon icon-vakeel">⚖️</div>
+        <span class="card-badge badge-vakeel">Advocates</span>
+      </div>
+      <div class="card-name">Vakeel AI</div>
+      <div class="card-tagline">AI legal drafting assistant for Kerala advocates — petitions, notices, client letters in Malayalam & English.</div>
+      <ul class="card-features">
+        <li class="feat-vakeel">Petition & writ drafting</li>
+        <li class="feat-vakeel">GST & legal notice generator</li>
+        <li class="feat-vakeel">Client update letters in Malayalam</li>
+        <li class="feat-vakeel">Kerala HC policy compliant</li>
+      </ul>
+      <a href="https://vakeel-ai-eta.vercel.app/" target="_blank" class="card-cta cta-vakeel" onclick="event.stopPropagation()">
+        Try Vakeel AI →
+      </a>
+    </div>
+
+    <!-- VlogSource -->
+    <div class="product-card card-vlog fade-up" onclick="window.open('https://vlogsource.vercel.app/','_blank')">
+      <div class="card-top">
+        <div class="card-icon icon-vlog">🎬</div>
+        <span class="card-badge badge-vlog">Creators</span>
+      </div>
+      <div class="card-name">VlogSource</div>
+      <div class="card-tagline">AI content engine for Malayalam YouTube & Instagram creators — scripts, titles, captions in seconds.</div>
+      <ul class="card-features">
+        <li class="feat-vlog">Full YouTube video scripts</li>
+        <li class="feat-vlog">Instagram reel scripts</li>
+        <li class="feat-vlog">Viral title & caption generator</li>
+        <li class="feat-vlog">4-week content calendar</li>
+      </ul>
+      <a href="https://vlogsource.vercel.app/" target="_blank" class="card-cta cta-vlog" onclick="event.stopPropagation()">
+        Try VlogSource →
+      </a>
+    </div>
+
+    <!-- CADesk AI -->
+    <div class="product-card card-cadesk fade-up" onclick="window.open('https://cadesk-ai.vercel.app/','_blank')">
+      <div class="card-top">
+        <div class="card-icon icon-cadesk">🧾</div>
+        <span class="card-badge badge-cadesk">Accountants</span>
+      </div>
+      <div class="card-name">CADesk AI</div>
+      <div class="card-tagline">AI drafting assistant for Kerala Chartered Accountants — GST replies, ITR letters, board resolutions.</div>
+      <ul class="card-features">
+        <li class="feat-cadesk">GST notice reply drafts</li>
+        <li class="feat-cadesk">Income tax demand replies</li>
+        <li class="feat-cadesk">Board resolutions & engagement letters</li>
+        <li class="feat-cadesk">Bilingual — English & Malayalam</li>
+      </ul>
+      <a href="https://cadesk-ai.vercel.app/" target="_blank" class="card-cta cta-cadesk" onclick="event.stopPropagation()">
+        Try CADesk AI →
+      </a>
+    </div>
+
+    <!-- TutorAI -->
+    <div class="product-card card-tutor fade-up" onclick="window.open('https://tutor-ai-beryl-three.vercel.app/','_blank')">
+      <div class="card-top">
+        <div class="card-icon icon-tutor">📚</div>
+        <span class="card-badge badge-tutor">Teachers</span>
+      </div>
+      <div class="card-name">TutorAI</div>
+      <div class="card-tagline">AI teaching assistant for Indian tuition teachers — question papers, study notes, lesson plans in 5 languages.</div>
+      <ul class="card-features">
+        <li class="feat-tutor">Kerala SCERT & CBSE question papers</li>
+        <li class="feat-tutor">Study notes & MCQ generator</li>
+        <li class="feat-tutor">Parent progress letters</li>
+        <li class="feat-tutor">5 languages — ML, HI, TA, TE, EN</li>
+      </ul>
+      <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank" class="card-cta cta-tutor" onclick="event.stopPropagation()">
+        Try TutorAI →
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WHY SECTION -->
+<section class="why-section" id="why">
+  <div class="why-inner">
+    <div>
+      <div class="section-label fade-up">Why Vectrasource</div>
+      <h2 class="section-title fade-up">Built different.<br/>For India.</h2>
+      <p class="section-sub fade-up">Most AI tools are built for Silicon Valley. We build for Kerala. For the advocate in Kozhikode, the teacher in Thrissur, the CA in Kochi.</p>
+
+      <div class="why-points">
+        <div class="why-point fade-up">
+          <div class="why-num">01</div>
+          <div>
+            <div class="why-title">Malayalam-first, not Malayalam-translated</div>
+            <div class="why-desc">Our tools write in natural Malayalam — not English translated to Malayalam. The difference is everything.</div>
+          </div>
+        </div>
+        <div class="why-point fade-up">
+          <div class="why-num">02</div>
+          <div>
+            <div class="why-title">Built for specific professions</div>
+            <div class="why-desc">Each tool knows its domain — Vakeel AI knows Section 73, TutorAI knows Kerala SCERT format. Not generic AI.</div>
+          </div>
+        </div>
+        <div class="why-point fade-up">
+          <div class="why-num">03</div>
+          <div>
+            <div class="why-title">Zero learning curve</div>
+            <div class="why-desc">Open the tool, describe your need, get your output. No prompting skills, no AI knowledge needed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-visual fade-up">
+      <div class="why-card-stack">
+        <div class="stack-card-back2"></div>
+        <div class="stack-card-back"></div>
+        <div class="stack-card">
+          <div class="stack-label">Vectrasource Suite</div>
+          <div class="stack-products">
+            <div class="stack-item">
+              <div class="stack-dot" style="background:var(--vakeel)"></div>
+              <span class="stack-item-name">Vakeel AI</span>
+              <span class="stack-item-tag">Lawyers</span>
+            </div>
+            <div class="stack-item">
+              <div class="stack-dot" style="background:var(--vlog)"></div>
+              <span class="stack-item-name">VlogSource</span>
+              <span class="stack-item-tag">Creators</span>
+            </div>
+            <div class="stack-item">
+              <div class="stack-dot" style="background:var(--cadesk)"></div>
+              <span class="stack-item-name">CADesk AI</span>
+              <span class="stack-item-tag">Accountants</span>
+            </div>
+            <div class="stack-item">
+              <div class="stack-dot" style="background:var(--tutor)"></div>
+              <span class="stack-item-name">TutorAI</span>
+              <span class="stack-item-tag">Teachers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMING SOON -->
+<section class="coming-section" id="coming">
+  <div class="coming-inner">
+    <div class="coming-header fade-up">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-title">What's coming next</h2>
+      <p class="section-sub">The Vectrasource suite is growing. More professions, more languages, more tools.</p>
+    </div>
+
+    <div class="coming-grid">
+      <div class="coming-card fade-up">
+        <span class="coming-emoji">🏥</span>
+        <div class="coming-name">ClinicAI</div>
+        <div class="coming-desc">AI assistant for Kerala Ayurvedic & general clinics — patient notes, treatment plans, parent communication in Malayalam.</div>
+      </div>
+      <div class="coming-card fade-up">
+        <span class="coming-emoji">🏠</span>
+        <div class="coming-name">PropAI</div>
+        <div class="coming-desc">AI tools for Kerala real estate agents — property listings, client follow-ups, sale agreements in Malayalam & English.</div>
+      </div>
+      <div class="coming-card fade-up">
+        <span class="coming-emoji">🛒</span>
+        <div class="coming-name">ShopAI</div>
+        <div class="coming-desc">AI content for Kerala small businesses — WhatsApp offers, festival campaigns, customer replies in Malayalam.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Vectra<span>source</span></div>
+      <div class="footer-tagline">Kerala's AI Productivity Suite — Built in India, for India.</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://vakeel-ai-eta.vercel.app/" target="_blank">Vakeel AI</a>
+      <a href="https://vlogsource.vercel.app/" target="_blank">VlogSource</a>
+      <a href="https://cadesk-ai.vercel.app/" target="_blank">CADesk AI</a>
+      <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank">TutorAI</a>
+    </div>
+  </div>
+  <div class="footer-copy">© 2026 Vectrasource. All rights reserved. Built with ❤️ in Kerala.</div>
+</footer>
+
+<script>
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, i * 100);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
