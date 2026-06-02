@@ -1,773 +1,837 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Vectrasource — Kerala's AI Productivity Suite</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vectrasource — India's AI Productivity Suite</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0A0908;
+  --bg2: #111009;
+  --bg3: #161410;
+  --card: #141210;
+  --card2: #1A1714;
+  --amber: #F59E0B;
+  --amber2: #D97706;
+  --amber3: #FCD34D;
+  --amberb: rgba(245,158,11,0.08);
+  --amberb2: rgba(245,158,11,0.14);
+  --white: #FAFAF8;
+  --mid: #9A9488;
+  --faint: #4A4640;
+  --border: rgba(245,158,11,0.12);
+  --border2: rgba(250,250,248,0.07);
+  --r: 14px;
+  --rl: 20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.6}
 
-  :root {
-    --bg: #0A0A0A;
-    --bg2: #111111;
-    --bg3: #161616;
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.2);
-    --text: #F0EDE8;
-    --text-mid: #9A9590;
-    --text-dim: #555;
-    --white: #ffffff;
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6}
 
-    /* Product colors */
-    --vakeel: #1D9E75;
-    --vakeel-glow: rgba(29,158,117,0.15);
-    --vlog: #FF3B3B;
-    --vlog-glow: rgba(255,59,59,0.15);
-    --cadesk: #3B82F6;
-    --cadesk-glow: rgba(59,130,246,0.15);
-    --tutor: #F97316;
-    --tutor-glow: rgba(249,115,22,0.15);
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,9,8,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 3rem;height:64px;display:flex;align-items:center;justify-content:space-between}
+.n-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.n-logo{width:34px;height:34px;background:var(--amber);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.n-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--white);letter-spacing:-0.3px}
+.n-name span{color:var(--amber)}
+.n-links{display:flex;align-items:center;gap:6px}
+.n-link{font-size:13px;color:var(--mid);text-decoration:none;padding:7px 13px;border-radius:8px;transition:0.15s}
+.n-link:hover{color:var(--white);background:var(--border2)}
+.n-cta{font-size:13px;font-weight:600;background:var(--amber);color:var(--bg);border:none;border-radius:9px;padding:9px 20px;cursor:pointer;transition:0.2s;text-decoration:none;font-family:'DM Sans',sans-serif}
+.n-cta:hover{background:var(--amber3);transform:translateY(-1px)}
+@media(max-width:640px){nav{padding:0 1.2rem}.n-links{display:none}}
 
-    --gold: #C9A84C;
-    --radius: 12px;
-    --radius-lg: 20px;
-  }
+/* HERO */
+.hero{min-height:96vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 2rem 80px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse at center,rgba(245,158,11,0.09) 0%,transparent 65%);pointer-events:none}
+.hero-glow2{position:absolute;bottom:-5%;left:20%;width:500px;height:400px;background:radial-gradient(ellipse at center,rgba(139,92,246,0.05) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(245,158,11,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,158,11,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 40%,transparent 100%);pointer-events:none}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:var(--amberb);border:1px solid var(--border);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:500;color:var(--amber);margin-bottom:32px;position:relative;z-index:1;animation:fadeup 0.7s ease both}
+.pill-dot{width:6px;height:6px;background:var(--amber);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.5)}}
+.hero-h{font-family:'Syne',sans-serif;font-size:clamp(42px,7vw,80px);font-weight:800;line-height:1.0;letter-spacing:-2.5px;color:var(--white);max-width:900px;position:relative;z-index:1;animation:fadeup 0.7s 0.1s ease both}
+.hero-h .serif{font-family:'Instrument Serif',serif;font-style:italic;color:var(--amber);letter-spacing:-1px}
+.hero-h .dim{color:var(--faint)}
+.hero-sub{font-size:clamp(15px,2vw,18px);font-weight:300;color:var(--mid);max-width:540px;margin:24px auto 40px;position:relative;z-index:1;line-height:1.7;animation:fadeup 0.7s 0.2s ease both}
+.hero-acts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;animation:fadeup 0.7s 0.3s ease both}
+.btn-primary{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;background:var(--amber);color:var(--bg);border:none;border-radius:11px;padding:14px 30px;cursor:pointer;transition:0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--amber3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(245,158,11,0.3)}
+.btn-secondary{font-family:'DM Sans',sans-serif;font-size:15px;font-weight:400;background:transparent;color:var(--mid);border:1.5px solid var(--border2);border-radius:11px;padding:13px 26px;cursor:pointer;transition:0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{color:var(--white);border-color:var(--border);background:var(--border2)}
+.hero-stats{display:flex;align-items:center;gap:32px;margin-top:60px;position:relative;z-index:1;animation:fadeup 0.7s 0.4s ease both;flex-wrap:wrap;justify-content:center}
+.h-stat-n{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--white)}
+.h-stat-l{font-size:12px;color:var(--faint);margin-top:2px}
+.h-divider{width:1px;height:36px;background:var(--border2)}
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-  html { scroll-behavior: smooth; }
+/* MARQUEE */
+.marquee-wrap{border-top:1px solid var(--border2);border-bottom:1px solid var(--border2);padding:16px 0;overflow:hidden;position:relative;background:var(--bg2)}
+.marquee-wrap::before,.marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+.marquee-wrap::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.marquee-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg2),transparent)}
+.marquee-track{display:flex;animation:scroll 32s linear infinite;width:max-content}
+.marquee-item{display:flex;align-items:center;gap:10px;padding:0 32px;white-space:nowrap;font-size:13px;color:var(--mid)}
+.marquee-item .dot{width:5px;height:5px;border-radius:50%;background:var(--amber);opacity:0.5}
+.marquee-item strong{color:var(--white);font-weight:500}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* SECTION COMMONS */
+.sec{padding:100px 2rem;position:relative;z-index:1}
+.inner{max-width:1160px;margin:0 auto}
+.sec-tag{display:inline-flex;align-items:center;gap:6px;background:var(--amberb);border:1px solid var(--border);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:600;color:var(--amber);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:18px}
+.sec-h{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.08;letter-spacing:-1.5px;color:var(--white)}
+.sec-h .serif{font-family:'Instrument Serif',serif;font-style:italic;color:var(--amber)}
+.sec-sub{font-size:16px;color:var(--mid);font-weight:300;line-height:1.7;max-width:500px}
 
-  /* NOISE TEXTURE */
-  body::before {
-    content: '';
-    position: fixed; inset: 0; z-index: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.4;
-  }
+/* PRODUCTS */
+.products-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px}
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:860px){.products-grid{grid-template-columns:1fr}}
+.product-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--rl);padding:32px;transition:all 0.25s;position:relative;overflow:hidden}
+.product-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent-color);transform:scaleX(0);transition:transform 0.3s;transform-origin:left}
+.product-card:hover{border-color:var(--border);background:var(--card2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.product-card:hover::before{transform:scaleX(1)}
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
+.pc-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.pc-tag{font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase}
+.pc-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--white);margin-bottom:4px}
+.pc-who{font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:12px}
+.pc-desc{font-size:14px;color:var(--mid);line-height:1.7;font-weight:300;margin-bottom:24px}
+.pc-tools{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}
+.pc-tool{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mid)}
+.pc-tool::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent-color);flex-shrink:0}
+.pc-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pc-link{font-size:13px;font-weight:500;color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:6px;transition:0.15s}
+.pc-link:hover{gap:10px}
+.pc-price{display:flex;align-items:center;gap:6px}
+.pc-price-free{font-size:11px;color:var(--faint);background:var(--bg3);border:1px solid var(--border2);padding:3px 10px;border-radius:100px}
+.pc-price-pro{font-size:11px;font-weight:700;color:var(--amber);background:var(--amberb);border:1px solid var(--border);padding:3px 10px;border-radius:100px}
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 1.25rem 3rem;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(10,10,10,0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px; font-weight: 900;
-    color: var(--white); letter-spacing: -0.5px;
-  }
-  .nav-brand span {
-    background: linear-gradient(135deg, var(--gold), #E8C97A);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .nav-links { display: flex; align-items: center; gap: 2rem; }
-  .nav-links a {
-    font-size: 13px; color: var(--text-mid);
-    text-decoration: none; transition: color 0.2s;
-    letter-spacing: 0.3px;
-  }
-  .nav-links a:hover { color: var(--white); }
-  .nav-cta {
-    background: var(--white); color: var(--bg) !important;
-    padding: 8px 20px; border-radius: 30px;
-    font-weight: 500 !important; font-size: 13px !important;
-    transition: opacity 0.2s !important;
-  }
-  .nav-cta:hover { opacity: 0.85 !important; color: var(--bg) !important; }
+.pc-vakeel{--accent-color:#8B5CF6}
+.pc-vlog{--accent-color:#FF4B26}
+.pc-ledger{--accent-color:#3B82F6}
+.pc-tutor{--accent-color:#10B981}
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center;
-    padding: 8rem 2rem 4rem;
-    position: relative; z-index: 1;
-  }
+.pc-vakeel .pc-icon{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)}
+.pc-vlog .pc-icon{background:rgba(255,75,38,0.1);border:1px solid rgba(255,75,38,0.2)}
+.pc-ledger .pc-icon{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2)}
+.pc-tutor .pc-icon{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)}
 
-  /* ANIMATED GRID BG */
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-    pointer-events: none;
-  }
+.pc-vakeel .pc-tag{background:rgba(139,92,246,0.12);color:#A78BFA}
+.pc-vlog .pc-tag{background:rgba(255,75,38,0.12);color:#FF7A5A}
+.pc-ledger .pc-tag{background:rgba(59,130,246,0.12);color:#60A5FA}
+.pc-tutor .pc-tag{background:rgba(16,185,129,0.12);color:#34D399}
 
-  /* GLOW ORBS */
-  .orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(80px); pointer-events: none; opacity: 0.3;
-  }
-  .orb-1 { width: 500px; height: 500px; background: var(--vakeel); top: 10%; left: -10%; animation: float1 8s ease-in-out infinite; }
-  .orb-2 { width: 400px; height: 400px; background: var(--vlog); top: 20%; right: -5%; animation: float2 10s ease-in-out infinite; }
-  .orb-3 { width: 300px; height: 300px; background: var(--cadesk); bottom: 20%; left: 20%; animation: float3 9s ease-in-out infinite; }
+.pc-vakeel .pc-who{color:#A78BFA}
+.pc-vlog .pc-who{color:#FF7A5A}
+.pc-ledger .pc-who{color:#60A5FA}
+.pc-tutor .pc-who{color:#34D399}
 
-  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-30px)} }
-  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,40px)} }
-  @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-20px)} }
+/* TOOL BROWSER */
+.browser-sec{background:var(--bg2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
+.browser-wrap{display:grid;grid-template-columns:260px 1fr;gap:0;border:1px solid var(--border2);border-radius:var(--rl);overflow:hidden;background:var(--card)}
+@media(max-width:760px){.browser-wrap{grid-template-columns:1fr}}
+.browser-sidebar{border-right:1px solid var(--border2);padding:24px 0}
+.bsb-label{font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);padding:0 20px;margin-bottom:12px}
+.bsb-item{display:flex;align-items:center;gap:12px;padding:11px 20px;cursor:pointer;transition:0.15s;border-left:2px solid transparent}
+.bsb-item:hover{background:var(--amberb)}
+.bsb-item.active{background:var(--amberb2);border-left-color:var(--amber)}
+.bsb-emoji{font-size:16px;width:28px;text-align:center}
+.bsb-name{font-size:13px;font-weight:600;color:var(--white)}
+.bsb-sub{font-size:11px;color:var(--faint)}
+.browser-main{padding:36px}
+.bm-product{display:none}
+.bm-product.active{display:block}
+.bm-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:6px}
+.bm-desc{font-size:14px;color:var(--mid);font-weight:300;margin-bottom:24px}
+.bm-tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.bm-tool{background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:16px;transition:0.15s}
+.bm-tool:hover{border-color:var(--border);background:var(--card2)}
+.bm-tool-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px}
+.bm-tool-desc{font-size:11px;color:var(--faint);line-height:1.5}
+.bm-cta{margin-top:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bm-link{font-size:13px;font-weight:600;color:var(--amber);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:0.15s}
+.bm-link:hover{gap:10px}
+.bm-count{font-size:12px;color:var(--faint)}
+.bm-price-badge{font-size:11px;font-weight:700;background:var(--amberb);border:1px solid var(--border);color:var(--amber);padding:3px 12px;border-radius:100px}
 
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 2rem;
-    border: 1px solid rgba(201,168,76,0.3);
-    padding: 6px 16px; border-radius: 30px;
-    background: rgba(201,168,76,0.05);
-    animation: fadeUp 0.8s ease both;
-  }
-  .hero-eyebrow::before { content: '◆'; font-size: 8px; }
+/* PRICING */
+.pricing-sec{background:var(--bg)}
+.pricing-intro{text-align:center;margin-bottom:56px}
 
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(48px, 8vw, 96px);
-    font-weight: 900; line-height: 1.0;
-    letter-spacing: -3px;
-    margin-bottom: 1.5rem;
-    animation: fadeUp 0.8s ease 0.1s both;
-  }
-  h1 .line1 { display: block; color: var(--white); }
-  h1 .line2 {
-    display: block;
-    background: linear-gradient(135deg, var(--gold) 0%, #E8C97A 50%, var(--gold) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* HOW PRICING WORKS */
+.pricing-explain{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:48px}
+@media(max-width:760px){.pricing-explain{grid-template-columns:1fr}}
+.pe-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:28px;text-align:center;position:relative;overflow:hidden;transition:0.2s}
+.pe-card:hover{border-color:var(--border);transform:translateY(-3px)}
+.pe-card.highlight{background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(245,158,11,0.03));border-color:var(--border)}
+.pe-emoji{font-size:32px;margin-bottom:16px}
+.pe-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--white);margin-bottom:6px}
+.pe-price{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--amber);line-height:1;margin-bottom:4px}
+.pe-price span{font-size:14px;color:var(--faint);font-weight:400}
+.pe-sub{font-size:13px;color:var(--faint);margin-bottom:20px;line-height:1.5}
+.pe-features{list-style:none;display:flex;flex-direction:column;gap:8px;text-align:left}
+.pe-features li{font-size:12px;color:var(--mid);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.pe-features li::before{content:'✓';color:var(--amber);font-weight:700;flex-shrink:0;margin-top:1px}
+.pe-features li.dim{color:var(--faint)}
+.pe-features li.dim::before{content:'—';color:var(--faint)}
+.pe-best{position:absolute;top:16px;right:16px;background:var(--amber);color:var(--bg);font-size:9px;font-weight:800;padding:3px 9px;border-radius:100px;letter-spacing:0.06em;text-transform:uppercase}
 
-  .hero-sub {
-    font-size: 17px; color: var(--text-mid);
-    line-height: 1.7; max-width: 560px;
-    margin: 0 auto 3rem;
-    animation: fadeUp 0.8s ease 0.2s both;
-  }
+/* TOOL PRICING TABLE */
+.tool-pricing-table{background:var(--card);border:1px solid var(--border2);border-radius:var(--rl);overflow:hidden;margin-bottom:16px}
+.tpt-header{display:grid;grid-template-columns:1fr 120px 120px;padding:14px 24px;background:var(--bg3);border-bottom:1px solid var(--border2)}
+.tpt-header span{font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint)}
+.tpt-header span:nth-child(2),.tpt-header span:nth-child(3){text-align:center}
+.tpt-row{display:grid;grid-template-columns:1fr 120px 120px;padding:16px 24px;border-bottom:1px solid var(--border2);align-items:center;transition:0.15s}
+.tpt-row:last-child{border-bottom:none}
+.tpt-row:hover{background:var(--amberb)}
+.tpt-left{display:flex;align-items:center;gap:12px}
+.tpt-emoji{font-size:18px;width:28px;text-align:center}
+.tpt-name{font-size:14px;font-weight:600;color:var(--white)}
+.tpt-who{font-size:11px;color:var(--faint)}
+.tpt-free{text-align:center;font-size:13px;color:var(--mid)}
+.tpt-pro{text-align:center}
+.tpt-pro-badge{font-size:13px;font-weight:700;color:var(--amber)}
+.tpt-note{font-size:12px;color:var(--faint);text-align:center;padding:16px;line-height:1.6}
+.tpt-note strong{color:var(--amber)}
+@media(max-width:560px){.tpt-header,.tpt-row{grid-template-columns:1fr 90px 90px;padding:12px 16px}}
 
-  .hero-ctas {
-    display: flex; align-items: center; gap: 1rem;
-    justify-content: center; flex-wrap: wrap;
-    animation: fadeUp 0.8s ease 0.3s both;
-    margin-bottom: 5rem;
-  }
-  .btn-primary {
-    background: var(--white); color: var(--bg);
-    padding: 14px 32px; border-radius: 30px;
-    font-size: 14px; font-weight: 500;
-    text-decoration: none; letter-spacing: 0.3px;
-    transition: all 0.2s;
-    border: none; cursor: pointer;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 40px rgba(255,255,255,0.1); }
-  .btn-secondary {
-    background: transparent; color: var(--text-mid);
-    padding: 14px 32px; border-radius: 30px;
-    font-size: 14px; font-weight: 400;
-    text-decoration: none; letter-spacing: 0.3px;
-    transition: all 0.2s;
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { border-color: var(--border-hover); color: var(--white); }
+/* WHY */
+.why-sec{background:var(--bg2);border-top:1px solid var(--border2)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:48px}
+@media(max-width:760px){.why-grid{grid-template-columns:1fr}}
+.why-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:28px;transition:0.2s}
+.why-card:hover{border-color:var(--border);transform:translateY(-3px)}
+.why-num{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--amberb2);line-height:1;margin-bottom:16px;letter-spacing:-2px}
+.why-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px}
+.why-desc{font-size:13px;color:var(--mid);line-height:1.7;font-weight:300}
 
-  /* STATS */
-  .stats-bar {
-    display: flex; justify-content: center; gap: 4rem;
-    flex-wrap: wrap;
-    animation: fadeUp 0.8s ease 0.4s both;
-  }
-  .stat { text-align: center; }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px; font-weight: 900; color: var(--white);
-    display: block;
-  }
-  .stat-label { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+/* ROADMAP */
+.road-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:48px}
+@media(max-width:760px){.road-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.road-grid{grid-template-columns:1fr}}
+.road-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:24px;opacity:0.7;transition:0.2s}
+.road-card:hover{opacity:1;border-color:var(--border)}
+.road-emoji{font-size:28px;margin-bottom:14px}
+.road-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:6px}
+.road-desc{font-size:13px;color:var(--faint);line-height:1.6;font-weight:300}
+.road-pill{display:inline-block;font-size:10px;font-weight:600;padding:2px 9px;border-radius:100px;background:var(--amberb);color:var(--amber);border:1px solid var(--border);margin-top:12px;letter-spacing:0.05em;text-transform:uppercase}
 
-  /* SECTION COMMON */
-  section { position: relative; z-index: 1; }
+/* CTA BAND */
+.cta-band{background:linear-gradient(135deg,rgba(245,158,11,0.08) 0%,rgba(139,92,246,0.05) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 2rem;text-align:center}
+.cta-h{font-family:'Syne',sans-serif;font-size:clamp(30px,5vw,52px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px}
+.cta-h .serif{font-family:'Instrument Serif',serif;font-style:italic;color:var(--amber)}
+.cta-sub{font-size:16px;color:var(--mid);margin-bottom:36px;font-weight:300}
 
-  .section-label {
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--gold); margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 900; color: var(--white);
-    line-height: 1.1; letter-spacing: -1px;
-    margin-bottom: 1rem;
-  }
-
-  .section-sub { font-size: 15px; color: var(--text-mid); line-height: 1.7; max-width: 500px; }
-
-  /* DIVIDER */
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 0 3rem;
-  }
-
-  /* PRODUCTS SECTION */
-  .products-section { padding: 8rem 2rem; }
-  .products-header { text-align: center; margin-bottom: 5rem; }
-  .products-header .section-label { justify-content: center; }
-  .products-header .section-label::before { display: none; }
-  .products-header .section-sub { margin: 0 auto; }
-
-  .products-grid {
-    max-width: 1100px; margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-  @media (max-width: 768px) { .products-grid { grid-template-columns: 1fr; } }
-
-  .product-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    text-decoration: none;
-    display: block;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  .product-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    opacity: 0; transition: opacity 0.3s;
-    border-radius: var(--radius-lg);
-  }
-  .product-card:hover { transform: translateY(-4px); border-color: var(--border-hover); }
-
-  /* Product specific colors */
-  .card-vakeel::before { background: var(--vakeel-glow); }
-  .card-vakeel:hover::before { opacity: 1; }
-  .card-vakeel:hover { border-color: rgba(29,158,117,0.4); box-shadow: 0 20px 60px var(--vakeel-glow); }
-
-  .card-vlog::before { background: var(--vlog-glow); }
-  .card-vlog:hover::before { opacity: 1; }
-  .card-vlog:hover { border-color: rgba(255,59,59,0.4); box-shadow: 0 20px 60px var(--vlog-glow); }
-
-  .card-cadesk::before { background: var(--cadesk-glow); }
-  .card-cadesk:hover::before { opacity: 1; }
-  .card-cadesk:hover { border-color: rgba(59,130,246,0.4); box-shadow: 0 20px 60px var(--cadesk-glow); }
-
-  .card-tutor::before { background: var(--tutor-glow); }
-  .card-tutor:hover::before { opacity: 1; }
-  .card-tutor:hover { border-color: rgba(249,115,22,0.4); box-shadow: 0 20px 60px var(--tutor-glow); }
-
-  .card-top {
-    display: flex; align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    position: relative; z-index: 1;
-  }
-  .card-icon {
-    width: 52px; height: 52px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-  }
-  .icon-vakeel { background: rgba(29,158,117,0.15); }
-  .icon-vlog { background: rgba(255,59,59,0.15); }
-  .icon-cadesk { background: rgba(59,130,246,0.15); }
-  .icon-tutor { background: rgba(249,115,22,0.15); }
-
-  .card-badge {
-    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 20px; font-weight: 600;
-  }
-  .badge-vakeel { background: rgba(29,158,117,0.15); color: var(--vakeel); border: 1px solid rgba(29,158,117,0.3); }
-  .badge-vlog { background: rgba(255,59,59,0.15); color: var(--vlog); border: 1px solid rgba(255,59,59,0.3); }
-  .badge-cadesk { background: rgba(59,130,246,0.15); color: var(--cadesk); border: 1px solid rgba(59,130,246,0.3); }
-  .badge-tutor { background: rgba(249,115,22,0.15); color: var(--tutor); border: 1px solid rgba(249,115,22,0.3); }
-
-  .card-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px; font-weight: 900;
-    color: var(--white); margin-bottom: 0.5rem;
-    position: relative; z-index: 1;
-    letter-spacing: -0.5px;
-  }
-  .card-tagline {
-    font-size: 13px; color: var(--text-mid);
-    margin-bottom: 1.5rem; line-height: 1.6;
-    position: relative; z-index: 1;
-  }
-
-  .card-features {
-    list-style: none;
-    margin-bottom: 2rem;
-    position: relative; z-index: 1;
-  }
-  .card-features li {
-    font-size: 13px; color: var(--text-mid);
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 8px;
-  }
-  .card-features li:last-child { border-bottom: none; }
-  .card-features li::before { content: '→'; font-size: 11px; }
-  .feat-vakeel::before { color: var(--vakeel) !important; }
-  .feat-vlog::before { color: var(--vlog) !important; }
-  .feat-cadesk::before { color: var(--cadesk) !important; }
-  .feat-tutor::before { color: var(--tutor) !important; }
-
-  .card-cta {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 500;
-    padding: 10px 20px; border-radius: 30px;
-    transition: all 0.2s;
-    position: relative; z-index: 1;
-    text-decoration: none;
-  }
-  .cta-vakeel { background: rgba(29,158,117,0.15); color: var(--vakeel); border: 1px solid rgba(29,158,117,0.3); }
-  .cta-vakeel:hover { background: var(--vakeel); color: var(--white); }
-  .cta-vlog { background: rgba(255,59,59,0.15); color: var(--vlog); border: 1px solid rgba(255,59,59,0.3); }
-  .cta-vlog:hover { background: var(--vlog); color: var(--white); }
-  .cta-cadesk { background: rgba(59,130,246,0.15); color: var(--cadesk); border: 1px solid rgba(59,130,246,0.3); }
-  .cta-cadesk:hover { background: var(--cadesk); color: var(--white); }
-  .cta-tutor { background: rgba(249,115,22,0.15); color: var(--tutor); border: 1px solid rgba(249,115,22,0.3); }
-  .cta-tutor:hover { background: var(--tutor); color: var(--white); }
-
-  /* WHY SECTION */
-  .why-section {
-    padding: 8rem 2rem;
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .why-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 6rem; align-items: center;
-  }
-  @media (max-width: 768px) { .why-inner { grid-template-columns: 1fr; gap: 3rem; } }
-
-  .why-points { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
-  .why-point {
-    display: flex; gap: 1rem; align-items: flex-start;
-    padding: 1.25rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    transition: border-color 0.2s;
-  }
-  .why-point:hover { border-color: var(--border-hover); }
-  .why-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px; font-weight: 900;
-    color: var(--gold); flex-shrink: 0; line-height: 1;
-  }
-  .why-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 4px; }
-  .why-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
-
-  .why-visual {
-    position: relative;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .why-card-stack { position: relative; width: 100%; max-width: 320px; margin: 0 auto; }
-  .stack-card {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 1.5rem;
-  }
-  .stack-card-back {
-    position: absolute; top: -16px; left: 16px; right: -16px;
-    height: 100%; background: var(--bg2);
-    border: 1px solid var(--border); border-radius: var(--radius-lg);
-    z-index: -1;
-  }
-  .stack-card-back2 {
-    position: absolute; top: -28px; left: 28px; right: -28px;
-    height: 100%; background: var(--bg);
-    border: 1px solid rgba(255,255,255,0.04); border-radius: var(--radius-lg);
-    z-index: -2;
-  }
-  .stack-label { font-size: 11px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; }
-  .stack-products { display: flex; flex-direction: column; gap: 10px; }
-  .stack-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px;
-    background: var(--bg2); border-radius: 8px;
-    border: 1px solid var(--border);
-  }
-  .stack-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .stack-item-name { font-size: 13px; color: var(--white); font-weight: 500; flex: 1; }
-  .stack-item-tag { font-size: 10px; color: var(--text-dim); }
-
-  /* COMING SOON */
-  .coming-section { padding: 6rem 2rem; }
-  .coming-inner { max-width: 1100px; margin: 0 auto; }
-  .coming-header { margin-bottom: 3rem; }
-  .coming-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  @media (max-width: 768px) { .coming-grid { grid-template-columns: 1fr; } }
-
-  .coming-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 1.5rem;
-    position: relative; overflow: hidden;
-  }
-  .coming-card::after {
-    content: 'SOON';
-    position: absolute; top: 14px; right: 14px;
-    font-size: 9px; letter-spacing: 2px;
-    background: rgba(255,255,255,0.05); color: var(--text-dim);
-    padding: 3px 8px; border-radius: 20px;
-    border: 1px solid var(--border);
-  }
-  .coming-emoji { font-size: 28px; margin-bottom: 1rem; display: block; }
-  .coming-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-  .coming-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
-
-  /* FOOTER */
-  footer {
-    padding: 4rem 3rem 3rem;
-    border-top: 1px solid var(--border);
-    position: relative; z-index: 1;
-  }
-  .footer-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 2rem;
-  }
-  .footer-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px; font-weight: 900; color: var(--white);
-  }
-  .footer-brand span {
-    background: linear-gradient(135deg, var(--gold), #E8C97A);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .footer-tagline { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
-  .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
-  .footer-links a { font-size: 13px; color: var(--text-mid); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--white); }
-  .footer-copy { font-size: 12px; color: var(--text-dim); text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-up {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-
-  /* MOBILE NAV */
-  @media (max-width: 640px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    .hero { padding: 7rem 1.5rem 3rem; }
-    h1 { letter-spacing: -2px; }
-    .stats-bar { gap: 2rem; }
-    .products-section { padding: 5rem 1.5rem; }
-    .why-section { padding: 5rem 1.5rem; }
-    .coming-section { padding: 5rem 1.5rem; }
-    footer { padding: 3rem 1.5rem 2rem; }
-    .footer-inner { flex-direction: column; }
-  }
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border2);padding:48px 2rem 36px}
+.footer-inner{max-width:1160px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px}
+@media(max-width:760px){.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.footer-top{grid-template-columns:1fr}}
+.f-brand{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:10px}
+.f-brand span{color:var(--amber)}
+.f-tagline{font-size:13px;color:var(--faint);line-height:1.6;font-weight:300;max-width:220px}
+.f-col-title{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);margin-bottom:16px}
+.f-links{display:flex;flex-direction:column;gap:8px}
+.f-link{font-size:13px;color:var(--mid);text-decoration:none;transition:0.15s}
+.f-link:hover{color:var(--amber)}
+.footer-bottom{border-top:1px solid var(--border2);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.f-copy{font-size:12px;color:var(--faint)}
+.f-made{font-size:12px;color:var(--faint)}
+.f-made span{color:var(--amber)}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-brand">Vectra<span>source</span></div>
-  <div class="nav-links">
-    <a href="#products">Products</a>
-    <a href="#why">Why Us</a>
-    <a href="#coming">Roadmap</a>
-    <a href="#products" class="nav-cta">Explore Tools →</a>
+  <a href="#" class="n-brand">
+    <div class="n-logo">⚡</div>
+    <span class="n-name">Vectrasource</span>
+  </a>
+  <div class="n-links">
+    <a href="#products" class="n-link">Products</a>
+    <a href="#browser" class="n-link">Tools</a>
+    <a href="#pricing" class="n-link">Pricing</a>
+    <a href="#roadmap" class="n-link">Roadmap</a>
+    <a href="#activate" class="n-link">Activate</a>
   </div>
+  <a href="#pricing" class="n-cta">See Pricing →</a>
 </nav>
 
 <!-- HERO -->
-<div class="hero">
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
   <div class="hero-grid"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
-  <div class="hero-eyebrow">Kerala's First AI Productivity Suite</div>
-
-  <h1>
-    <span class="line1">AI tools built</span>
-    <span class="line2">for India</span>
+  <div class="hero-pill"><div class="pill-dot"></div>4 products · 20+ AI tools · Built for Kerala</div>
+  <h1 class="hero-h">
+    India's <span class="serif">professional</span><br/>
+    AI suite — <span class="dim">built for</span><br/>
+    <span class="serif">Kerala</span>
   </h1>
-
-  <p class="hero-sub">
-    A suite of intelligent tools for Kerala's lawyers, creators, accountants, and teachers — built in Malayalam, designed for India.
-  </p>
-
-  <div class="hero-ctas">
-    <a href="#products" class="btn-primary">Explore All Tools</a>
-    <a href="#why" class="btn-secondary">Why Vectrasource?</a>
+  <p class="hero-sub">AI tools for lawyers, creators, accountants and teachers. In Malayalam. In English. 5 free trials on every tool — no sign-up needed.</p>
+  <div class="hero-acts">
+    <a href="#products" class="btn-primary">⚡ Try free — no sign-up</a>
+    <a href="#pricing" class="btn-secondary">See pricing →</a>
   </div>
-
-  <div class="stats-bar">
-    <div class="stat">
-      <span class="stat-num">4</span>
-      <span class="stat-label">AI Products</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">5</span>
-      <span class="stat-label">Languages</span>
-    </div>
-    <div class="stat">
-      <span class="stat-num">∞</span>
-      <span class="stat-label">Possibilities</span>
-    </div>
+  <div class="hero-stats">
+    <div><div class="h-stat-n">4</div><div class="h-stat-l">AI Products</div></div>
+    <div class="h-divider"></div>
+    <div><div class="h-stat-n">20+</div><div class="h-stat-l">Tools inside</div></div>
+    <div class="h-divider"></div>
+    <div><div class="h-stat-n">6</div><div class="h-stat-l">Languages</div></div>
+    <div class="h-divider"></div>
+    <div><div class="h-stat-n">Free</div><div class="h-stat-l">To try</div></div>
   </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mtrack"></div>
 </div>
 
-<div class="divider"></div>
-
 <!-- PRODUCTS -->
-<section class="products-section" id="products">
-  <div class="products-header fade-up">
-    <div class="section-label">Our Products</div>
-    <h2 class="section-title">Four tools.<br/>One suite.</h2>
-    <p class="section-sub">Each product built for a specific profession, in the language they work in every day.</p>
+<section class="sec" id="products" style="background:var(--bg)">
+  <div class="inner">
+    <div class="products-header">
+      <div>
+        <div class="sec-tag">The Suite</div>
+        <h2 class="sec-h">Four products.<br/><span class="serif">One suite.</span></h2>
+      </div>
+      <p class="sec-sub">Each product is built for a specific profession, in the language they actually work in. Not generic AI — domain-specific intelligence.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card pc-vakeel">
+        <div class="pc-top">
+          <div class="pc-icon">⚖️</div>
+          <span class="pc-tag">For Lawyers</span>
+        </div>
+        <div class="pc-name">Vakeel AI</div>
+        <div class="pc-who">Kerala Advocates</div>
+        <div class="pc-desc">AI legal drafting for Kerala advocates. Petitions, notices, client letters — drafted in seconds in Malayalam & English, compliant with Kerala HC guidelines.</div>
+        <div class="pc-tools">
+          <div class="pc-tool">Petition & writ drafting</div>
+          <div class="pc-tool">GST & legal notice generator</div>
+          <div class="pc-tool">Client update letters in Malayalam</div>
+          <div class="pc-tool">Kerala HC policy compliant</div>
+        </div>
+        <div class="pc-footer">
+          <a href="https://vakeel-ai-eta.vercel.app/" target="_blank" class="pc-link">Try Vakeel AI →</a>
+          <div class="pc-price">
+            <span class="pc-price-free">5 free trials</span>
+            <span class="pc-price-pro">₹269/mo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card pc-vlog">
+        <div class="pc-top">
+          <div class="pc-icon">🎬</div>
+          <span class="pc-tag">For Creators</span>
+        </div>
+        <div class="pc-name">VlogSource</div>
+        <div class="pc-who">Malayalam Creators</div>
+        <div class="pc-desc">AI content engine for Kerala YouTube & Instagram creators. Scripts, viral titles, reel scripts, captions and content calendar — in Malayalam, Manglish or English.</div>
+        <div class="pc-tools">
+          <div class="pc-tool">Full YouTube video scripts</div>
+          <div class="pc-tool">Hook writer & reel scripts</div>
+          <div class="pc-tool">Viral title & caption generator</div>
+          <div class="pc-tool">4-week content calendar</div>
+          <div class="pc-tool">Malayalam · Manglish · English</div>
+        </div>
+        <div class="pc-footer">
+          <a href="https://vlogsource.vercel.app/" target="_blank" class="pc-link">Try VlogSource →</a>
+          <div class="pc-price">
+            <span class="pc-price-free">5 free trials</span>
+            <span class="pc-price-pro">₹269/mo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card pc-ledger">
+        <div class="pc-top">
+          <div class="pc-icon">🧾</div>
+          <span class="pc-tag">For CAs</span>
+        </div>
+        <div class="pc-name">Ledger AI</div>
+        <div class="pc-who">Kerala Accountants</div>
+        <div class="pc-desc">AI drafting for Kerala Chartered Accountants. GST replies, ITR letters, board resolutions — drafted professionally in minutes, not hours.</div>
+        <div class="pc-tools">
+          <div class="pc-tool">GST notice reply drafts</div>
+          <div class="pc-tool">Income tax demand replies</div>
+          <div class="pc-tool">Board resolutions & engagement letters</div>
+          <div class="pc-tool">Bilingual — English & Malayalam</div>
+        </div>
+        <div class="pc-footer">
+          <a href="https://ledgerai.vercel.app/" target="_blank" class="pc-link">Try Ledger AI →</a>
+          <div class="pc-price">
+            <span class="pc-price-free">5 free trials</span>
+            <span class="pc-price-pro">₹269/mo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card pc-tutor">
+        <div class="pc-top">
+          <div class="pc-icon">📚</div>
+          <span class="pc-tag">For Teachers</span>
+        </div>
+        <div class="pc-name">TutorAI</div>
+        <div class="pc-who">Indian Tuition Teachers</div>
+        <div class="pc-desc">AI teaching assistant for Indian tuition teachers. Question papers, study notes, MCQs, lesson plans and parent letters — in 6 Indian languages, for every board and class.</div>
+        <div class="pc-tools">
+          <div class="pc-tool">Kerala SCERT & CBSE question papers</div>
+          <div class="pc-tool">Study notes & MCQ generator</div>
+          <div class="pc-tool">Parent progress letters</div>
+          <div class="pc-tool">6 languages — ML, HI, TA, TE, KN, EN</div>
+          <div class="pc-tool">PDF export & WhatsApp share</div>
+        </div>
+        <div class="pc-footer">
+          <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank" class="pc-link">Try TutorAI →</a>
+          <div class="pc-price">
+            <span class="pc-price-free">5 free trials</span>
+            <span class="pc-price-pro">₹269/mo</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
+</section>
 
-  <div class="products-grid">
-
-    <!-- Vakeel AI -->
-    <div class="product-card card-vakeel fade-up" onclick="window.open('https://vakeel-ai-eta.vercel.app/','_blank')">
-      <div class="card-top">
-        <div class="card-icon icon-vakeel">⚖️</div>
-        <span class="card-badge badge-vakeel">Advocates</span>
+<!-- TOOL BROWSER -->
+<section class="sec browser-sec" id="browser">
+  <div class="inner">
+    <div style="margin-bottom:40px">
+      <div class="sec-tag">Inside the Suite</div>
+      <h2 class="sec-h">Browse every <span class="serif">tool</span></h2>
+    </div>
+    <div class="browser-wrap">
+      <div class="browser-sidebar">
+        <div class="bsb-label">Products</div>
+        <div class="bsb-item active" data-product="vakeel">
+          <div class="bsb-emoji">⚖️</div>
+          <div><div class="bsb-name">Vakeel AI</div><div class="bsb-sub">4 tools</div></div>
+        </div>
+        <div class="bsb-item" data-product="vlog">
+          <div class="bsb-emoji">🎬</div>
+          <div><div class="bsb-name">VlogSource</div><div class="bsb-sub">7 tools</div></div>
+        </div>
+        <div class="bsb-item" data-product="cadesk">
+          <div class="bsb-emoji">🧾</div>
+          <div><div class="bsb-name">Ledger AI</div><div class="bsb-sub">4 tools</div></div>
+        </div>
+        <div class="bsb-item" data-product="tutor">
+          <div class="bsb-emoji">📚</div>
+          <div><div class="bsb-name">TutorAI</div><div class="bsb-sub">6 tools</div></div>
+        </div>
       </div>
-      <div class="card-name">Vakeel AI</div>
-      <div class="card-tagline">AI legal drafting assistant for Kerala advocates — petitions, notices, client letters in Malayalam & English.</div>
-      <ul class="card-features">
-        <li class="feat-vakeel">Petition & writ drafting</li>
-        <li class="feat-vakeel">GST & legal notice generator</li>
-        <li class="feat-vakeel">Client update letters in Malayalam</li>
-        <li class="feat-vakeel">Kerala HC policy compliant</li>
-      </ul>
-      <a href="https://vakeel-ai-eta.vercel.app/" target="_blank" class="card-cta cta-vakeel" onclick="event.stopPropagation()">
-        Try Vakeel AI →
-      </a>
+      <div class="browser-main">
+
+        <div class="bm-product active" data-product="vakeel">
+          <div class="bm-title">⚖️ Vakeel AI</div>
+          <div class="bm-desc">AI legal drafting for Kerala advocates — Malayalam & English</div>
+          <div class="bm-tools-grid">
+            <div class="bm-tool"><div class="bm-tool-name">📜 Petition Drafter</div><div class="bm-tool-desc">Civil & criminal petitions following Kerala HC format</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📮 Legal Notice</div><div class="bm-tool-desc">GST notices, demand letters, cease & desist</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📨 Client Letter</div><div class="bm-tool-desc">Case update letters in Malayalam & English</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📋 Writ Petition</div><div class="bm-tool-desc">High Court writ petitions, HC policy compliant</div></div>
+          </div>
+          <div class="bm-cta">
+            <a href="https://vakeel-ai-eta.vercel.app/" target="_blank" class="bm-link">Open Vakeel AI →</a>
+            <span class="bm-count">4 tools</span>
+            <span class="bm-price-badge">₹269/month after free trial</span>
+          </div>
+        </div>
+
+        <div class="bm-product" data-product="vlog">
+          <div class="bm-title">🎬 VlogSource</div>
+          <div class="bm-desc">AI content engine for Malayalam YouTube & Instagram creators</div>
+          <div class="bm-tools-grid">
+            <div class="bm-tool"><div class="bm-tool-name">🎬 Video Script</div><div class="bm-tool-desc">Full YouTube scripts with B-roll notes & CTAs</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">🎣 Hook Writer</div><div class="bm-tool-desc">5 hook styles for the first 30 seconds</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📱 Reel Script</div><div class="bm-tool-desc">30/60/90 second Instagram & YouTube Shorts</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">🔥 Title Generator</div><div class="bm-tool-desc">10 viral YouTube titles per video</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">✍️ Caption + Tags</div><div class="bm-tool-desc">Instagram captions with 30 hashtags</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">💡 Content Ideas</div><div class="bm-tool-desc">10 niche-specific video ideas</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📅 Content Calendar</div><div class="bm-tool-desc">4-week posting plan with best times</div></div>
+          </div>
+          <div class="bm-cta">
+            <a href="https://vlogsource.vercel.app/" target="_blank" class="bm-link">Open VlogSource →</a>
+            <span class="bm-count">7 tools</span>
+            <span class="bm-price-badge">₹269/month after free trial</span>
+          </div>
+        </div>
+
+        <div class="bm-product" data-product="cadesk">
+          <div class="bm-title">🧾 Ledger AI</div>
+          <div class="bm-desc">AI drafting for Kerala Chartered Accountants</div>
+          <div class="bm-tools-grid">
+            <div class="bm-tool"><div class="bm-tool-name">📑 GST Reply</div><div class="bm-tool-desc">Notice reply drafts for SCN, demand orders</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📊 ITR Letter</div><div class="bm-tool-desc">Income tax demand & scrutiny replies</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">🏢 Board Resolution</div><div class="bm-tool-desc">Company board resolutions in proper format</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">🤝 Engagement Letter</div><div class="bm-tool-desc">Client engagement letters & agreements</div></div>
+          </div>
+          <div class="bm-cta">
+            <a href="https://ledgerai.vercel.app/" target="_blank" class="bm-link">Open Ledger AI →</a>
+            <span class="bm-count">4 tools</span>
+            <span class="bm-price-badge">₹269/month after free trial</span>
+          </div>
+        </div>
+
+        <div class="bm-product" data-product="tutor">
+          <div class="bm-title">📚 TutorAI</div>
+          <div class="bm-desc">AI teaching assistant — 6 languages, all boards, all classes</div>
+          <div class="bm-tools-grid">
+            <div class="bm-tool"><div class="bm-tool-name">📝 Question Paper</div><div class="bm-tool-desc">SCERT, CBSE, ICSE papers with answer key</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">📖 Study Notes</div><div class="bm-tool-desc">Chapter summaries & revision notes</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">✅ MCQ Generator</div><div class="bm-tool-desc">Multiple choice questions with answer key</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">🗓️ Lesson Plan</div><div class="bm-tool-desc">Day-by-day teaching plans</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">👨‍👩‍👧 Parent Letter</div><div class="bm-tool-desc">Progress letters in any language</div></div>
+            <div class="bm-tool"><div class="bm-tool-name">💡 Topic Explainer</div><div class="bm-tool-desc">Simple explanations with Indian examples</div></div>
+          </div>
+          <div class="bm-cta">
+            <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank" class="bm-link">Open TutorAI →</a>
+            <span class="bm-count">6 tools</span>
+            <span class="bm-price-badge">₹269/month after free trial</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="sec pricing-sec" id="pricing">
+  <div class="inner">
+    <div class="pricing-intro">
+      <div class="sec-tag" style="margin:0 auto 18px">Pricing</div>
+      <h2 class="sec-h">Simple pricing.<br/><span class="serif">Pay for what you use.</span></h2>
+      <p class="sec-sub" style="margin:16px auto 0">Try every tool free. Pay only for the ones you love. Use multiple tools? The suite saves you money automatically.</p>
     </div>
 
-    <!-- VlogSource -->
-    <div class="product-card card-vlog fade-up" onclick="window.open('https://vlogsource.vercel.app/','_blank')">
-      <div class="card-top">
-        <div class="card-icon icon-vlog">🎬</div>
-        <span class="card-badge badge-vlog">Creators</span>
+    <!-- 3 tier cards -->
+    <div class="pricing-explain">
+      <div class="pe-card">
+        <div class="pe-emoji">🆓</div>
+        <div class="pe-name">Free Trial</div>
+        <div class="pe-price">₹0<span>/forever</span></div>
+        <div class="pe-sub">5 free generations on every tool — no sign-up, no card</div>
+        <ul class="pe-features">
+          <li>5 free tries on each product</li>
+          <li>All 4 products accessible</li>
+          <li>No account needed</li>
+          <li class="dim">Unlimited generations</li>
+          <li class="dim">PDF export</li>
+          <li class="dim">WhatsApp share</li>
+        </ul>
       </div>
-      <div class="card-name">VlogSource</div>
-      <div class="card-tagline">AI content engine for Malayalam YouTube & Instagram creators — scripts, titles, captions in seconds.</div>
-      <ul class="card-features">
-        <li class="feat-vlog">Full YouTube video scripts</li>
-        <li class="feat-vlog">Instagram reel scripts</li>
-        <li class="feat-vlog">Viral title & caption generator</li>
-        <li class="feat-vlog">4-week content calendar</li>
-      </ul>
-      <a href="https://vlogsource.vercel.app/" target="_blank" class="card-cta cta-vlog" onclick="event.stopPropagation()">
-        Try VlogSource →
-      </a>
+
+      <div class="pe-card">
+        <div class="pe-emoji">⚡</div>
+        <div class="pe-name">Single Tool Pro</div>
+        <div class="pe-price">₹269<span>/month</span></div>
+        <div class="pe-sub">Pick the one product you need most — unlimited access</div>
+        <ul class="pe-features">
+          <li>Unlimited generations on 1 product</li>
+          <li>PDF export & WhatsApp share</li>
+          <li>All tools inside that product</li>
+          <li>Cancel anytime</li>
+          <li class="dim">Other products</li>
+          <li class="dim">Future tools</li>
+        </ul>
+      </div>
+
+      <div class="pe-card highlight">
+        <div class="pe-best">BEST VALUE</div>
+        <div class="pe-emoji">🚀</div>
+        <div class="pe-name">Suite Pro</div>
+        <div class="pe-price">₹699<span>/month</span></div>
+        <div class="pe-sub">All 4 products + every future tool we ship — one price</div>
+        <ul class="pe-features">
+          <li>Unlimited on all 4 products</li>
+          <li>PDF export & WhatsApp share</li>
+          <li>ClinicAI, PropAI, ShopAI — early access</li>
+          <li>Every new tool included free</li>
+          <li>Priority support</li>
+          <li>Cancel anytime</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- CADesk AI -->
-    <div class="product-card card-cadesk fade-up" onclick="window.open('https://cadesk-ai.vercel.app/','_blank')">
-      <div class="card-top">
-        <div class="card-icon icon-cadesk">🧾</div>
-        <span class="card-badge badge-cadesk">Accountants</span>
+    <!-- Per-tool pricing table -->
+    <div class="tool-pricing-table">
+      <div class="tpt-header">
+        <span>Product</span>
+        <span>Free</span>
+        <span>Pro</span>
       </div>
-      <div class="card-name">CADesk AI</div>
-      <div class="card-tagline">AI drafting assistant for Kerala Chartered Accountants — GST replies, ITR letters, board resolutions.</div>
-      <ul class="card-features">
-        <li class="feat-cadesk">GST notice reply drafts</li>
-        <li class="feat-cadesk">Income tax demand replies</li>
-        <li class="feat-cadesk">Board resolutions & engagement letters</li>
-        <li class="feat-cadesk">Bilingual — English & Malayalam</li>
-      </ul>
-      <a href="https://cadesk-ai.vercel.app/" target="_blank" class="card-cta cta-cadesk" onclick="event.stopPropagation()">
-        Try CADesk AI →
-      </a>
-    </div>
-
-    <!-- TutorAI -->
-    <div class="product-card card-tutor fade-up" onclick="window.open('https://tutor-ai-beryl-three.vercel.app/','_blank')">
-      <div class="card-top">
-        <div class="card-icon icon-tutor">📚</div>
-        <span class="card-badge badge-tutor">Teachers</span>
+      <div class="tpt-row">
+        <div class="tpt-left">
+          <div class="tpt-emoji">⚖️</div>
+          <div><div class="tpt-name">Vakeel AI</div><div class="tpt-who">Kerala Lawyers</div></div>
+        </div>
+        <div class="tpt-free">5 generations</div>
+        <div class="tpt-pro"><span class="tpt-pro-badge">₹269/mo</span></div>
       </div>
-      <div class="card-name">TutorAI</div>
-      <div class="card-tagline">AI teaching assistant for Indian tuition teachers — question papers, study notes, lesson plans in 5 languages.</div>
-      <ul class="card-features">
-        <li class="feat-tutor">Kerala SCERT & CBSE question papers</li>
-        <li class="feat-tutor">Study notes & MCQ generator</li>
-        <li class="feat-tutor">Parent progress letters</li>
-        <li class="feat-tutor">5 languages — ML, HI, TA, TE, EN</li>
-      </ul>
-      <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank" class="card-cta cta-tutor" onclick="event.stopPropagation()">
-        Try TutorAI →
-      </a>
+      <div class="tpt-row">
+        <div class="tpt-left">
+          <div class="tpt-emoji">🎬</div>
+          <div><div class="tpt-name">VlogSource</div><div class="tpt-who">Kerala Creators</div></div>
+        </div>
+        <div class="tpt-free">5 generations</div>
+        <div class="tpt-pro"><span class="tpt-pro-badge">₹269/mo</span></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-left">
+          <div class="tpt-emoji">🧾</div>
+          <div><div class="tpt-name">Ledger AI</div><div class="tpt-who">Kerala CAs</div></div>
+        </div>
+        <div class="tpt-free">5 generations</div>
+        <div class="tpt-pro"><span class="tpt-pro-badge">₹269/mo</span></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-left">
+          <div class="tpt-emoji">📚</div>
+          <div><div class="tpt-name">TutorAI</div><div class="tpt-who">Indian Teachers</div></div>
+        </div>
+        <div class="tpt-free">5 generations</div>
+        <div class="tpt-pro"><span class="tpt-pro-badge">₹269/mo</span></div>
+      </div>
+      <div class="tpt-note">
+        Using 3 or more tools? <strong>Suite Pro at ₹699/month</strong> saves you money — and includes every new tool we ship.
+      </div>
     </div>
 
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- WHY SECTION -->
-<section class="why-section" id="why">
-  <div class="why-inner">
-    <div>
-      <div class="section-label fade-up">Why Vectrasource</div>
-      <h2 class="section-title fade-up">Built different.<br/>For India.</h2>
-      <p class="section-sub fade-up">Most AI tools are built for Silicon Valley. We build for Kerala. For the advocate in Kozhikode, the teacher in Thrissur, the CA in Kochi.</p>
-
-      <div class="why-points">
-        <div class="why-point fade-up">
-          <div class="why-num">01</div>
-          <div>
-            <div class="why-title">Malayalam-first, not Malayalam-translated</div>
-            <div class="why-desc">Our tools write in natural Malayalam — not English translated to Malayalam. The difference is everything.</div>
-          </div>
-        </div>
-        <div class="why-point fade-up">
-          <div class="why-num">02</div>
-          <div>
-            <div class="why-title">Built for specific professions</div>
-            <div class="why-desc">Each tool knows its domain — Vakeel AI knows Section 73, TutorAI knows Kerala SCERT format. Not generic AI.</div>
-          </div>
-        </div>
-        <div class="why-point fade-up">
-          <div class="why-num">03</div>
-          <div>
-            <div class="why-title">Zero learning curve</div>
-            <div class="why-desc">Open the tool, describe your need, get your output. No prompting skills, no AI knowledge needed.</div>
-          </div>
-        </div>
+<!-- WHY -->
+<section class="sec why-sec" id="why">
+  <div class="inner">
+    <div class="sec-tag">Why Vectrasource</div>
+    <h2 class="sec-h">Built different.<br/><span class="serif">For India.</span></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-title">Malayalam-first, not Malayalam-translated</div>
+        <div class="why-desc">Our tools write in natural Malayalam — not English translated to Malayalam. The difference is everything. A Kozhikode advocate's petition sounds like it was written by a Kozhikode advocate.</div>
       </div>
-    </div>
-
-    <div class="why-visual fade-up">
-      <div class="why-card-stack">
-        <div class="stack-card-back2"></div>
-        <div class="stack-card-back"></div>
-        <div class="stack-card">
-          <div class="stack-label">Vectrasource Suite</div>
-          <div class="stack-products">
-            <div class="stack-item">
-              <div class="stack-dot" style="background:var(--vakeel)"></div>
-              <span class="stack-item-name">Vakeel AI</span>
-              <span class="stack-item-tag">Lawyers</span>
-            </div>
-            <div class="stack-item">
-              <div class="stack-dot" style="background:var(--vlog)"></div>
-              <span class="stack-item-name">VlogSource</span>
-              <span class="stack-item-tag">Creators</span>
-            </div>
-            <div class="stack-item">
-              <div class="stack-dot" style="background:var(--cadesk)"></div>
-              <span class="stack-item-name">CADesk AI</span>
-              <span class="stack-item-tag">Accountants</span>
-            </div>
-            <div class="stack-item">
-              <div class="stack-dot" style="background:var(--tutor)"></div>
-              <span class="stack-item-name">TutorAI</span>
-              <span class="stack-item-tag">Teachers</span>
-            </div>
-          </div>
-        </div>
+      <div class="why-card">
+        <div class="why-num">02</div>
+        <div class="why-title">Built for specific professions, not generic tasks</div>
+        <div class="why-desc">Vakeel AI knows Section 73. TutorAI knows Kerala SCERT format. VlogSource knows Manglish. Each tool has domain intelligence baked in — not generic AI with a thin skin.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-title">Zero learning curve, instant results</div>
+        <div class="why-desc">Open the tool, fill in the fields, get your output. No prompting knowledge. No AI literacy required. If you can fill a form, you can use Vectrasource.</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- COMING SOON -->
-<section class="coming-section" id="coming">
-  <div class="coming-inner">
-    <div class="coming-header fade-up">
-      <div class="section-label">Roadmap</div>
-      <h2 class="section-title">What's coming next</h2>
-      <p class="section-sub">The Vectrasource suite is growing. More professions, more languages, more tools.</p>
+<!-- ROADMAP -->
+<section class="sec" id="roadmap" style="background:var(--bg)">
+  <div class="inner">
+    <div class="sec-tag">Roadmap</div>
+    <h2 class="sec-h">What's coming <span class="serif">next</span></h2>
+    <div class="road-grid">
+      <div class="road-card">
+        <div class="road-emoji">🏥</div>
+        <div class="road-name">ClinicAI</div>
+        <div class="road-desc">AI assistant for Kerala clinics — patient notes, treatment plans, parent communication in Malayalam.</div>
+        <div class="road-pill">Coming soon</div>
+      </div>
+      <div class="road-card">
+        <div class="road-emoji">🏠</div>
+        <div class="road-name">PropAI</div>
+        <div class="road-desc">AI tools for Kerala real estate agents — property listings, client follow-ups, agreements in Malayalam & English.</div>
+        <div class="road-pill">Coming soon</div>
+      </div>
+      <div class="road-card">
+        <div class="road-emoji">🛒</div>
+        <div class="road-name">ShopAI</div>
+        <div class="road-desc">AI content for Kerala small businesses — WhatsApp offers, festival campaigns, customer replies in Malayalam.</div>
+        <div class="road-pill">Coming soon</div>
+      </div>
     </div>
+    <p style="font-size:13px;color:var(--faint);margin-top:24px;text-align:center">All upcoming tools are included in Suite Pro at no extra cost.</p>
+  </div>
+</section>
 
-    <div class="coming-grid">
-      <div class="coming-card fade-up">
-        <span class="coming-emoji">🏥</span>
-        <div class="coming-name">ClinicAI</div>
-        <div class="coming-desc">AI assistant for Kerala Ayurvedic & general clinics — patient notes, treatment plans, parent communication in Malayalam.</div>
+<!-- CTA -->
+<!-- SUBSCRIBER TOKEN SECTION -->
+<section class="sec" style="background:var(--bg2);border-top:1px solid var(--border2)" id="activate">
+  <div class="inner" style="max-width:640px;text-align:center">
+    <div class="sec-tag" style="margin:0 auto 18px">Already Subscribed?</div>
+    <h2 class="sec-h">Activate your <span class="serif">access</span></h2>
+    <p class="sec-sub" style="margin:16px auto 40px">Paid for a plan? Enter your access token below to verify your subscription and get direct links to all your tools.</p>
+
+    <div id="tokenBox" style="background:var(--card);border:1px solid var(--border2);border-radius:var(--rl);padding:36px;text-align:left">
+
+      <div id="tokenForm">
+        <label style="display:block;font-size:11px;font-weight:600;color:var(--faint);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px">Your Access Token</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="text" id="tokenInput" placeholder="vs_..." style="flex:1;min-width:200px;padding:12px 16px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:10px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.15s" onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border2)'"/>
+          <button onclick="activateToken()" id="activateBtn" style="background:var(--amber);color:var(--bg);border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif;transition:0.2s;white-space:nowrap" onmouseover="this.style.background='var(--amber3)'" onmouseout="this.style.background='var(--amber)'">Verify Token →</button>
+        </div>
+        <div id="tokenError" style="font-size:12px;color:#f87171;margin-top:10px;display:none"></div>
+        <p style="font-size:12px;color:var(--faint);margin-top:12px">Your token was emailed to you after payment. Check your inbox for an email from <strong style="color:var(--mid)">hello@vectrasource.com</strong></p>
       </div>
-      <div class="coming-card fade-up">
-        <span class="coming-emoji">🏠</span>
-        <div class="coming-name">PropAI</div>
-        <div class="coming-desc">AI tools for Kerala real estate agents — property listings, client follow-ups, sale agreements in Malayalam & English.</div>
+
+      <div id="tokenSuccess" style="display:none">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+          <div style="width:44px;height:44px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">✓</div>
+          <div>
+            <div id="successTitle" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#34d399">Subscription Active</div>
+            <div id="successMeta" style="font-size:13px;color:var(--faint);margin-top:2px"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:600;color:var(--faint);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:12px">Your tools</div>
+        <div id="toolLinks" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+        <p style="font-size:11px;color:var(--faint);margin-top:16px">Copy your token and paste it in each tool when prompted — or click a tool above to open it directly.</p>
       </div>
-      <div class="coming-card fade-up">
-        <span class="coming-emoji">🛒</span>
-        <div class="coming-name">ShopAI</div>
-        <div class="coming-desc">AI content for Kerala small businesses — WhatsApp offers, festival campaigns, customer replies in Malayalam.</div>
-      </div>
+
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="cta-band">
+  <h2 class="cta-h">Try free.<br/><span class="serif">Pay only if you love it.</span></h2>
+  <p class="cta-sub">5 free generations on every tool — no sign-up, no card required.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="#products" class="btn-primary">⚡ Try all tools free</a>
+    <a href="#pricing" class="btn-secondary">See pricing →</a>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div>
-      <div class="footer-brand">Vectra<span>source</span></div>
-      <div class="footer-tagline">Kerala's AI Productivity Suite — Built in India, for India.</div>
+    <div class="footer-top">
+      <div>
+        <div class="f-brand">Vectrasource</div>
+        <p class="f-tagline">Kerala's AI Productivity Suite — built in India, for India.</p>
+      </div>
+      <div>
+        <div class="f-col-title">Products</div>
+        <div class="f-links">
+          <a href="https://vakeel-ai-eta.vercel.app/" class="f-link" target="_blank">Vakeel AI</a>
+          <a href="https://vlogsource.vercel.app/" class="f-link" target="_blank">VlogSource</a>
+          <a href="https://ledgerai.vercel.app/" class="f-link" target="_blank">Ledger AI</a>
+          <a href="https://tutor-ai-beryl-three.vercel.app/" class="f-link" target="_blank">TutorAI</a>
+        </div>
+      </div>
+      <div>
+        <div class="f-col-title">Coming Soon</div>
+        <div class="f-links">
+          <a href="#roadmap" class="f-link">ClinicAI</a>
+          <a href="#roadmap" class="f-link">PropAI</a>
+          <a href="#roadmap" class="f-link">ShopAI</a>
+        </div>
+      </div>
+      <div>
+        <div class="f-col-title">Company</div>
+        <div class="f-links">
+          <a href="#pricing" class="f-link">Pricing</a>
+          <a href="#why" class="f-link">About</a>
+          <a href="#" class="f-link">Privacy</a>
+          <a href="#" class="f-link">Terms</a>
+        </div>
+      </div>
     </div>
-    <div class="footer-links">
-      <a href="https://vakeel-ai-eta.vercel.app/" target="_blank">Vakeel AI</a>
-      <a href="https://vlogsource.vercel.app/" target="_blank">VlogSource</a>
-      <a href="https://cadesk-ai.vercel.app/" target="_blank">CADesk AI</a>
-      <a href="https://tutor-ai-beryl-three.vercel.app/" target="_blank">TutorAI</a>
+    <div class="footer-bottom">
+      <div class="f-copy">© 2026 Vectrasource. All rights reserved.</div>
+      <div class="f-made">Built with <span>♥</span> in Kerala, India</div>
     </div>
   </div>
-  <div class="footer-copy">© 2026 Vectrasource. All rights reserved. Built with ❤️ in Kerala.</div>
 </footer>
 
 <script>
-// Scroll animations
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => {
-        entry.target.classList.add('visible');
-      }, i * 100);
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1 });
+// MARQUEE
+const items = [
+  'Vakeel AI','Legal Drafting','Malayalam','Petition Writer',
+  'VlogSource','Video Scripts','Hook Writer','Content Calendar',
+  'Ledger AI','GST Replies','CA Tools','ITR Letters',
+  'TutorAI','Question Papers','6 Languages','SCERT Format',
+  'Kerala Professionals','AI Tools','Built in India','Free to Try'
+];
+const track = document.getElementById('mtrack');
+[...items,...items].forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'marquee-item';
+  el.innerHTML = `<span class="dot"></span><strong>${item}</strong>`;
+  track.appendChild(el);
+});
 
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// TOKEN ACTIVATION
+const AUTH_API = 'https://vectrasource-auth.vercel.app';
+const TOOL_INFO = {
+  tutorai:    { name: 'TutorAI',    emoji: '📚', url: 'https://tutor-ai-beryl-three.vercel.app', color: '#10B981' },
+  vlogsource: { name: 'VlogSource', emoji: '🎬', url: 'https://vlogsource.vercel.app',           color: '#FF4B26' },
+  ledgerai:   { name: 'Ledger AI',  emoji: '🧾', url: 'https://ledgerai.vercel.app',             color: '#3B82F6' },
+  vakeel:     { name: 'Vakeel AI',  emoji: '⚖️', url: 'https://vakeel-ai-eta.vercel.app',        color: '#8B5CF6' },
+};
+
+async function activateToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  const btn = document.getElementById('activateBtn');
+  const errEl = document.getElementById('tokenError');
+  if (!token) { errEl.textContent='Please enter your token.'; errEl.style.display='block'; return; }
+  btn.textContent='Verifying...'; btn.style.opacity='0.7'; btn.disabled=true; errEl.style.display='none';
+  try {
+    const res = await fetch(AUTH_API + '/api/verify', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ token, product: 'suite' })
+    });
+    const data = await res.json();
+    if (data.valid) {
+      document.getElementById('tokenForm').style.display = 'none';
+      document.getElementById('tokenSuccess').style.display = 'block';
+      const expiry = new Date(data.validUntil).toLocaleDateString('en-IN');
+      document.getElementById('successTitle').textContent = `✓ ${data.planName} Active`;
+      document.getElementById('successMeta').textContent = `${data.email} · Valid until ${expiry}`;
+      const toolLinks = document.getElementById('toolLinks');
+      const tools = data.plan === 'suite' ? Object.keys(TOOL_INFO) : [data.plan];
+      toolLinks.innerHTML = tools.map(key => {
+        const t = TOOL_INFO[key]; if (!t) return '';
+        return `<a href="${t.url}" target="_blank" style="display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:14px;text-decoration:none;transition:0.15s" onmouseover="this.style.borderColor='${t.color}'" onmouseout="this.style.borderColor='var(--border2)'"><span style="font-size:22px">${t.emoji}</span><div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white)">${t.name}</div><div style="font-size:11px;color:var(--faint);margin-top:2px">Open tool →</div></div></a>`;
+      }).join('');
+      tools.forEach(key => localStorage.setItem(`vs_token_${key}`, token));
+    } else {
+      errEl.textContent = data.error === 'Subscription expired' ? 'Your subscription has expired. Please renew.' : data.error === 'This plan does not include suite' ? 'This is a single-tool token. Open that tool directly and enter it there.' : 'Invalid token. Please check your email and try again.';
+      errEl.style.display='block'; btn.textContent='Verify Token →'; btn.style.opacity='1'; btn.disabled=false;
+    }
+  } catch(e) {
+    errEl.textContent='Connection error. Please try again.';
+    errEl.style.display='block'; btn.textContent='Verify Token →'; btn.style.opacity='1'; btn.disabled=false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('tokenInput')?.addEventListener('keydown', e => { if(e.key==='Enter') activateToken(); });
+});
+
+// BROWSER TABS
+document.querySelectorAll('.bsb-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const p = item.dataset.product;
+    document.querySelectorAll('.bsb-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.bm-product').forEach(x => x.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelector(`.bm-product[data-product="${p}"]`).classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
