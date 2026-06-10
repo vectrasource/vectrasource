@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vectrasource — India's First AI Professional Suite for Kerala</title>
+<meta name="description" content="Kerala's AI Professional Suite — VlogSource, Vakeel AI, TaxDraft AI, TutorAI. Built for Malayalam creators, advocates, CAs and teachers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Malayalam:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080C14;
+  --blue:#2D6BE4;--blue-l:#5B8DF0;--blue-d:#1a4aad;
+  --amber:#F5A623;--amber-l:#F7B84B;--amber-d:#C47D0A;
+  --slate:#1A2035;--slate-l:#232d4a;
+  --em:#10B981;--navy:#1a3a8f;--sky:#38bdf8;--orange:#F97316;
+  --w100:#fff;--w80:rgba(255,255,255,.8);--w60:rgba(255,255,255,.6);--w35:rgba(255,255,255,.35);--w12:rgba(255,255,255,.12);--w06:rgba(255,255,255,.06);--w04:rgba(255,255,255,.04);
+  --glass:rgba(26,32,53,.55);--glass-b:rgba(255,255,255,.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+#canvas3d{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;transition:opacity .5s}
+.page{position:relative;z-index:1}
+
+/* ── NAV ──────────────────────────────────────────────────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:18px 56px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,12,20,.4);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-bottom:1px solid rgba(45,107,228,.12);transition:background .3s}
+.nav.solid{background:rgba(8,12,20,.92)}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nav-v{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--blue-d),var(--blue));border-radius:10px;box-shadow:0 0 18px rgba(45,107,228,.45)}
+.nav-v span{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:900;color:#fff;line-height:1}
+.nav-name{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;letter-spacing:.16em;background:linear-gradient(135deg,var(--blue-l),#fff,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-right{display:flex;align-items:center;gap:22px}
+.nav-link{font-size:.82rem;color:var(--w60);text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.nav-link:hover{color:var(--amber)}
+
+/* ── BUTTONS ──────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 28px;border-radius:8px;font-weight:600;font-size:.88rem;letter-spacing:.06em;cursor:pointer;transition:all .3s;text-decoration:none;border:none;font-family:'Inter',sans-serif;white-space:nowrap}
+.btn-blue{background:linear-gradient(135deg,var(--blue-d),var(--blue),var(--blue-l));color:#fff;box-shadow:0 4px 22px rgba(45,107,228,.32)}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(45,107,228,.52)}
+.btn-amber{background:linear-gradient(135deg,var(--amber-d),var(--amber),var(--amber-l));color:#080C14;box-shadow:0 4px 22px rgba(245,166,35,.32)}
+.btn-amber:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(245,166,35,.52)}
+.btn-glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--w80);backdrop-filter:blur(12px)}
+.btn-glass:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.24);transform:translateY(-2px)}
+.btn-sm{padding:9px 18px;font-size:.79rem}
+.btn-full{width:100%;justify-content:center}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 80px;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 50% at 50% 50%,rgba(45,107,228,.06) 0%,rgba(245,166,35,.02) 60%,transparent 100%);pointer-events:none}
+.hero-inner{max-width:800px;position:relative}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 18px;background:rgba(45,107,228,.09);border:1px solid rgba(45,107,228,.3);border-radius:100px;font-size:.7rem;letter-spacing:.18em;color:var(--blue-l);text-transform:uppercase;font-weight:600;margin-bottom:32px}
+.badge-dot{width:6px;height:6px;background:var(--blue-l);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.7)}}
+
+.hero-headline{font-family:'Cinzel',serif;font-size:clamp(2.8rem,7vw,5.8rem);font-weight:900;line-height:.96;letter-spacing:.06em;margin-bottom:8px;background:linear-gradient(135deg,#fff 0%,var(--blue-l) 35%,#fff 60%,var(--amber) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-family:'Cinzel',serif;font-size:clamp(.85rem,1.9vw,1.2rem);letter-spacing:.28em;color:var(--w60);margin-bottom:20px}
+.hero-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--amber),transparent);margin:20px auto}
+.hero-ml{font-family:'Noto Sans Malayalam',sans-serif;font-size:clamp(.88rem,1.7vw,1.06rem);color:var(--amber);opacity:.88;margin-bottom:12px;letter-spacing:.04em}
+.hero-tagline{font-size:clamp(.92rem,1.7vw,1.1rem);color:var(--w60);line-height:1.72;margin-bottom:42px;max-width:580px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:56px}
+.btn-hero{padding:15px 38px;font-size:.95rem;border-radius:9px;letter-spacing:.08em}
+
+.hero-tools-strip{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.tool-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;border:1px solid;cursor:default}
+
+/* ── SECTION COMMONS ──────────────────────────────────────── */
+.section{padding:100px 24px}
+.sec-inner{max-width:1160px;margin:0 auto}
+.sec-hd{text-align:center;margin-bottom:64px}
+.sec-label{font-size:.68rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--blue-l);margin-bottom:12px}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.8vw,2.65rem);font-weight:700;margin-bottom:14px}
+.sec-sub{font-size:.93rem;color:var(--w60);max-width:520px;margin:0 auto;line-height:1.74}
+
+/* ── TOOLS GRID ───────────────────────────────────────────── */
+.tools-section{background:linear-gradient(180deg,transparent 0%,rgba(26,32,53,.6) 20%,rgba(26,32,53,.7) 80%,transparent 100%)}
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+
+.tool-card{background:var(--glass);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--glass-b);border-radius:20px;padding:36px 30px;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transition:opacity .4s}
+.tool-card::after{content:'';position:absolute;inset:0;border-radius:20px;opacity:0;transition:opacity .4s}
+.tool-card:hover{transform:translateY(-7px)}
+.tool-card:hover::after{opacity:1}
+
+/* Per-card accent colors */
+.tc-vlog::before{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+.tc-vlog:hover{border-color:rgba(245,166,35,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 48px rgba(245,166,35,.08)}
+.tc-vakeel::before{background:linear-gradient(90deg,transparent,#4A90D9,transparent)}
+.tc-vakeel:hover{border-color:rgba(74,144,217,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 48px rgba(74,144,217,.08)}
+.tc-tax::before{background:linear-gradient(90deg,transparent,var(--em),transparent)}
+.tc-tax:hover{border-color:rgba(16,185,129,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 48px rgba(16,185,129,.08)}
+.tc-tutor::before{background:linear-gradient(90deg,transparent,var(--orange),transparent)}
+.tc-tutor:hover{border-color:rgba(249,115,22,.3);box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 48px rgba(249,115,22,.08)}
+
+.tool-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.tool-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tool-badge{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:100px;border:1px solid;white-space:nowrap}
+.tool-name{font-family:'Cinzel',serif;font-size:1.35rem;font-weight:700;margin-bottom:4px}
+.tool-audience{font-size:.78rem;color:var(--w60);letter-spacing:.04em;margin-bottom:14px;font-weight:500}
+.tool-desc{font-size:.875rem;color:var(--w60);line-height:1.68;margin-bottom:22px;flex:1}
+.tool-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto}
+.tool-price{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--w80)}
+.tool-price span{font-size:.75rem;color:var(--w35);font-family:'Inter',sans-serif;font-weight:400}
+
+/* ── SUITE BANNER ─────────────────────────────────────────── */
+.suite-section{padding:0 24px 100px}
+.suite-box{max-width:900px;margin:0 auto;border-radius:28px;padding:64px 56px;position:relative;overflow:hidden;text-align:center;border:1px solid rgba(245,166,35,.25);background:linear-gradient(135deg,rgba(26,32,53,.9) 0%,rgba(10,20,50,.95) 50%,rgba(26,32,53,.9) 100%);box-shadow:0 32px 80px rgba(0,0,0,.55),0 0 80px rgba(245,166,35,.06)}
+.suite-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--blue),var(--amber),var(--blue),transparent)}
+.suite-box::after{content:'';position:absolute;inset:0;border-radius:28px;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(245,166,35,.06) 0%,transparent 70%);pointer-events:none}
+.suite-eyebrow{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:16px}
+.suite-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,#fff 0%,var(--amber-l) 60%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.suite-sub{font-size:.95rem;color:var(--w60);margin-bottom:32px;line-height:1.7}
+.suite-price-row{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:32px}
+.suite-price-main{display:flex;align-items:baseline;gap:4px}
+.suite-curr{font-family:'Cinzel',serif;font-size:2.2rem;font-weight:700;color:var(--amber)}
+.suite-num{font-family:'Cinzel',serif;font-size:5.5rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--amber-d),var(--amber),var(--amber-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.suite-per{font-size:1.1rem;color:var(--w40)}
+.suite-saving{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:100px;padding:6px 18px;font-size:.8rem;color:var(--amber);font-weight:600;letter-spacing:.06em}
+.suite-tools-list{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+.stl{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--w60)}
+.stl-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ── WHY SECTION ──────────────────────────────────────────── */
+.why-section{padding:0 24px 100px}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why-card{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--glass-b);border-radius:18px;padding:36px 28px;text-align:center;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.why-card:hover{border-color:rgba(45,107,228,.28);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,0,0,.38),0 0 32px rgba(45,107,228,.07)}
+.why-icon{width:56px;height:56px;border-radius:16px;background:rgba(45,107,228,.1);border:1px solid rgba(45,107,228,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:var(--blue-l)}
+.why-title{font-family:'Cinzel',serif;font-size:1.12rem;font-weight:700;margin-bottom:10px;color:var(--w100)}
+.why-desc{font-size:.875rem;color:var(--w60);line-height:1.68}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+footer{padding:40px 56px;border-top:1px solid rgba(45,107,228,.1);background:rgba(8,12,20,.7);backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.f-logo{font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;letter-spacing:.16em;background:linear-gradient(135deg,var(--blue-l),#fff,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.f-tagline{font-size:.78rem;color:var(--w35);letter-spacing:.04em}
+.f-copy{font-size:.74rem;color:var(--w35)}
+.f-links{display:flex;gap:20px}
+.f-link{font-size:.74rem;color:var(--w35);text-decoration:none;transition:color .2s}
+.f-link:hover{color:var(--amber)}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media(max-width:900px){
+  .tools-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .suite-box{padding:44px 28px}
+}
+@media(max-width:768px){
+  .nav{padding:14px 22px}
+  .nav-link{display:none}
+  .section{padding:72px 18px}
+  footer{flex-direction:column;text-align:center;padding:30px 22px}
+  .suite-num{font-size:4rem}
+}
+@media(max-width:480px){
+  .hero-btns .btn-hero:last-child{display:none}
+  .tool-card{padding:28px 22px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="canvas3d"></canvas>
+
+<div class="page">
+
+<!-- ── NAV ── -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-v"><span>V</span></div>
+    <span class="nav-name">VECTRASOURCE</span>
+  </a>
+  <div class="nav-right">
+    <a href="#tools" class="nav-link">Tools</a>
+    <a href="#suite" class="nav-link">Suite Pro</a>
+    <a href="https://rzp.io/rzp/6F7N1ov" class="btn btn-amber btn-sm" target="_blank">Suite Pro ₹699/mo</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span>India's First AI Professional Suite</div>
+
+    <h1 class="hero-headline">VECTRASOURCE</h1>
+    <p class="hero-sub">KERALA'S AI PROFESSIONAL SUITE</p>
+    <div class="hero-divider"></div>
+    <p class="hero-ml">കേരളത്തിലെ പ്രൊഫഷണലുകൾക്കായി നിർമ്മിച്ചത്</p>
+    <p class="hero-tagline">Four purpose-built AI tools for Malayalam creators, advocates, chartered accountants, and teachers. Professional-grade. Radically affordable.</p>
+
+    <div class="hero-btns">
+      <a href="#tools" class="btn btn-blue btn-hero">Explore the Suite</a>
+      <a href="https://rzp.io/rzp/6F7N1ov" class="btn btn-amber btn-hero" target="_blank">Suite Pro — ₹699/mo</a>
+    </div>
+
+    <div class="hero-tools-strip">
+      <span class="tool-chip" style="color:#F5A623;border-color:#F5A62340;background:rgba(245,166,35,.06)">● VlogSource</span>
+      <span class="tool-chip" style="color:#4A90D9;border-color:#4A90D940;background:rgba(74,144,217,.06)">● Vakeel AI</span>
+      <span class="tool-chip" style="color:#10B981;border-color:#10B98140;background:rgba(16,185,129,.06)">● TaxDraft AI</span>
+      <span class="tool-chip" style="color:#F97316;border-color:#F9731640;background:rgba(249,115,22,.06)">● TutorAI</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS ── -->
+<section class="section tools-section" id="tools">
+  <div class="sec-inner">
+    <div class="sec-hd">
+      <p class="sec-label">The Suite</p>
+      <h2 class="sec-title">Four Tools. <span style="background:linear-gradient(135deg,var(--blue-l),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">One Vision.</span></h2>
+      <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--amber),transparent);margin:14px auto 0"></div>
+      <p class="sec-sub" style="margin-top:14px">Each tool is purpose-built for a specific Kerala profession. No bloated general AI — focused, professional-grade intelligence.</p>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- VlogSource -->
+      <div class="tool-card tc-vlog">
+        <div class="tool-header">
+          <div class="tool-icon" style="background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.28)">
+            <svg width="24" height="24" fill="none" stroke="#F5A623" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <span class="tool-badge" style="color:#F5A623;border-color:#F5A62340;background:rgba(245,166,35,.07)">Malayalam Creators</span>
+        </div>
+        <h3 class="tool-name">VlogSource</h3>
+        <p class="tool-audience">For Malayalam YouTubers &amp; Content Creators</p>
+        <p class="tool-desc">AI-powered YouTube script writer, video title &amp; thumbnail idea generator, and trending topic explorer — purpose-built for the Malayalam creator economy and Kerala's growing YouTube landscape.</p>
+        <div class="tool-footer">
+          <div class="tool-price">₹269 <span>/ month</span></div>
+          <a href="https://vlogsource.vercel.app" class="btn btn-amber btn-sm" target="_blank">Try Now →</a>
+        </div>
+      </div>
+
+      <!-- Vakeel AI -->
+      <div class="tool-card tc-vakeel">
+        <div class="tool-header">
+          <div class="tool-icon" style="background:rgba(74,144,217,.12);border:1px solid rgba(74,144,217,.28)">
+            <svg width="24" height="24" fill="none" stroke="#4A90D9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+          </div>
+          <span class="tool-badge" style="color:#4A90D9;border-color:#4A90D940;background:rgba(74,144,217,.07)">Advocates</span>
+        </div>
+        <h3 class="tool-name">Vakeel AI</h3>
+        <p class="tool-audience">For Kerala Advocates &amp; Law Firms</p>
+        <p class="tool-desc">Draft legal notices, petition summaries, client letters, and court documents in seconds. Kerala High Court-aware, section-referenced, and submission-ready — built for the Indian legal system.</p>
+        <div class="tool-footer">
+          <div class="tool-price">₹269 <span>/ month</span></div>
+          <a href="https://vakeel-ai.vercel.app" class="btn btn-sm" style="background:rgba(74,144,217,.12);border:1px solid rgba(74,144,217,.35);color:#4A90D9" target="_blank">Try Now →</a>
+        </div>
+      </div>
+
+      <!-- TaxDraft AI -->
+      <div class="tool-card tc-tax">
+        <div class="tool-header">
+          <div class="tool-icon" style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.28)">
+            <svg width="24" height="24" fill="none" stroke="#10B981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <span class="tool-badge" style="color:#10B981;border-color:#10B98140;background:rgba(16,185,129,.07)">Chartered Accountants</span>
+        </div>
+        <h3 class="tool-name">TaxDraft AI</h3>
+        <p class="tool-audience">For Kerala CAs &amp; Tax Professionals</p>
+        <p class="tool-desc">Generate ITR summaries, GST notice replies, tax planning letters and professional client communications in minutes. India-compliant templates built for Kerala Chartered Accountants and businesses.</p>
+        <div class="tool-footer">
+          <div class="tool-price">₹269 <span>/ month</span></div>
+          <a href="https://taxdraft-ai.vercel.app" class="btn btn-sm" style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.35);color:#10B981" target="_blank">Try Now →</a>
+        </div>
+      </div>
+
+      <!-- TutorAI -->
+      <div class="tool-card tc-tutor">
+        <div class="tool-header">
+          <div class="tool-icon" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.28)">
+            <svg width="24" height="24" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <span class="tool-badge" style="color:#F97316;border-color:#F9731640;background:rgba(249,115,22,.07)">Teachers</span>
+        </div>
+        <h3 class="tool-name">TutorAI</h3>
+        <p class="tool-audience">For Indian Tuition Teachers &amp; Educators</p>
+        <p class="tool-desc">Create question papers, study notes, lesson plans, parent letters, MCQs and topic explanations — aligned to CBSE, Kerala SCERT, ICSE, and all State Boards. Multilingual, NEP 2020-ready.</p>
+        <div class="tool-footer">
+          <div class="tool-price">₹269 <span>/ month</span></div>
+          <a href="https://tutorai-v2.vercel.app" class="btn btn-sm" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.35);color:#F97316" target="_blank">Try Now →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SUITE PRO BANNER ── -->
+<section class="suite-section" id="suite">
+  <div class="suite-box">
+    <p class="suite-eyebrow">✦ Best Value</p>
+    <h2 class="suite-title">Get All 4 Tools.<br>One Suite. One Price.</h2>
+    <p class="suite-sub">Everything in Vectrasource — VlogSource, Vakeel AI, TaxDraft AI &amp; TutorAI — at one unbeatable price.</p>
+
+    <div class="suite-price-row">
+      <div class="suite-price-main">
+        <span class="suite-curr">₹</span>
+        <span class="suite-num">699</span>
+        <span class="suite-per">/month</span>
+      </div>
+      <div>
+        <div class="suite-saving">Save ₹377/month vs individual</div>
+        <p style="font-size:.72rem;color:var(--w35);margin-top:6px;text-align:center">All 4 tools · Cancel anytime</p>
+      </div>
+    </div>
+
+    <div class="suite-tools-list">
+      <span class="stl"><span class="stl-dot" style="background:#F5A623"></span>VlogSource</span>
+      <span style="color:var(--w35)">+</span>
+      <span class="stl"><span class="stl-dot" style="background:#4A90D9"></span>Vakeel AI</span>
+      <span style="color:var(--w35)">+</span>
+      <span class="stl"><span class="stl-dot" style="background:#10B981"></span>TaxDraft AI</span>
+      <span style="color:var(--w35)">+</span>
+      <span class="stl"><span class="stl-dot" style="background:#F97316"></span>TutorAI</span>
+    </div>
+
+    <a href="https://rzp.io/rzp/6F7N1ov" class="btn btn-amber" style="padding:17px 56px;font-size:1rem;letter-spacing:.1em;border-radius:10px" target="_blank">
+      Subscribe Now — ₹699/month
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+    </a>
+    <p style="margin-top:12px;font-size:.76rem;color:var(--w35)">Secured by Razorpay · No hidden fees · Cancel anytime</p>
+  </div>
+</section>
+
+<!-- ── WHY VECTRASOURCE ── -->
+<section class="why-section" id="why">
+  <div class="sec-inner">
+    <div class="sec-hd">
+      <p class="sec-label">Why Vectrasource</p>
+      <h2 class="sec-title">Built Different.<br><span style="background:linear-gradient(135deg,var(--blue-l),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Priced for India.</span></h2>
+    </div>
+
+    <div class="why-grid">
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3 class="why-title">Kerala-First AI</h3>
+        <p class="why-desc">Built with Kerala's professional context, legal system, language, boards, and culture at its core. Not adapted from generic AI — designed for Kerala from day one.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+        </div>
+        <h3 class="why-title">Professional Grade</h3>
+        <p class="why-desc">Each tool is purpose-built for its profession. Vakeel AI knows Indian law. TaxDraft AI knows GST and ITR. TutorAI knows SCERT. Not generic — specialized and production-ready.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="why-title">Radically Affordable</h3>
+        <p class="why-desc">₹269/month per tool. The entire four-tool Suite Pro for just ₹699/month. That is less than ₹23 per day — less than a chai at a Kerala café — for professional-grade AI.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="f-logo">VECTRASOURCE</div>
+    <p class="f-tagline" style="margin-top:5px">Built for Kerala. Powered by AI.</p>
+  </div>
+  <p class="f-copy">© 2026 Vectrasource · India's First AI Professional Suite</p>
+  <div class="f-links">
+    <a href="https://vlogsource.vercel.app" class="f-link" target="_blank">VlogSource</a>
+    <a href="https://vakeel-ai.vercel.app" class="f-link" target="_blank">Vakeel AI</a>
+    <a href="https://taxdraft-ai.vercel.app" class="f-link" target="_blank">TaxDraft AI</a>
+    <a href="https://tutorai-v2.vercel.app" class="f-link" target="_blank">TutorAI</a>
+  </div>
+</footer>
+
+</div><!-- end .page -->
+
+<script>
+// ── NAV SCROLL ──────────────────────────────────────────────────────────────
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('solid', window.scrollY > 60);
+  const op = Math.max(0.15, 1 - window.scrollY / (window.innerHeight * 0.8));
+  const c = document.getElementById('canvas3d');
+  if (c) c.style.opacity = op;
+}, { passive: true });
+
+// ── THREE.JS SCENE ──────────────────────────────────────────────────────────
+function initThreeScene() {
+  if (typeof THREE === 'undefined') return;
+  const canvas = document.getElementById('canvas3d');
+  if (!canvas) return;
+
+  // WebGL probe
+  try {
+    const probe = document.createElement('canvas');
+    if (!(probe.getContext('webgl2') || probe.getContext('webgl') || probe.getContext('experimental-webgl'))) return;
+  } catch(e) { return; }
+
+  const W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+  const isMobile = W < 768;
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: !isMobile, alpha: true, powerPreference: 'high-performance' });
+  } catch(e) { return; }
+
+  renderer.setSize(W, H, false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+  try { renderer.outputColorSpace = THREE.SRGBColorSpace; } catch(e) {}
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x080C14, 0.018);
+
+  const camera = new THREE.PerspectiveCamera(isMobile ? 72 : 58, W / H, 0.1, 120);
+  camera.position.set(0, 0, 14);
+  camera.lookAt(0, 0, 0);
+
+  // ── LIGHTS ────────────────────────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0x080c1a, 4));
+
+  const blueKey = new THREE.PointLight(0x2D6BE4, 12, 35);
+  blueKey.position.set(0, 6, 5);
+  scene.add(blueKey);
+
+  const amberFill = new THREE.PointLight(0xF5A623, 5, 28);
+  amberFill.position.set(-7, -4, 4);
+  scene.add(amberFill);
+
+  const rimLight = new THREE.DirectionalLight(0x1a3a8f, 1.2);
+  rimLight.position.set(6, 8, -6);
+  scene.add(rimLight);
+
+  const topSpot = new THREE.SpotLight(0x6699ff, 6, 25, Math.PI / 7, 0.4, 1.5);
+  topSpot.position.set(0, 14, 2);
+  scene.add(topSpot);
+  scene.add(topSpot.target);
+
+  // ── V LOGO ────────────────────────────────────────────────────────────────
+  // Build V shape with THREE.Shape
+  const vShape = new THREE.Shape();
+  vShape.moveTo(-1.0,  1.0);
+  vShape.lineTo( 0.0, -1.05);
+  vShape.lineTo( 1.0,  1.0);
+  vShape.lineTo( 0.58, 1.0);
+  vShape.lineTo( 0.0, -0.28);
+  vShape.lineTo(-0.58, 1.0);
+  vShape.closePath();
+
+  const extSettings = {
+    steps: 1, depth: 0.5,
+    bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.05, bevelOffset: 0, bevelSegments: 5
+  };
+  const vGeom = new THREE.ExtrudeGeometry(vShape, extSettings);
+  vGeom.center();
+
+  const matV = new THREE.MeshStandardMaterial({
+    color: 0x2D6BE4, metalness: 0.82, roughness: 0.18,
+    emissive: 0x1433a0, emissiveIntensity: 0.55
+  });
+
+  const vMesh = new THREE.Mesh(vGeom, matV);
+  vMesh.scale.setScalar(1.5);
+
+  // Glow aura behind V
+  const vAura = new THREE.Mesh(
+    new THREE.SphereGeometry(2.6, 24, 24),
+    new THREE.MeshBasicMaterial({ color: 0x2D6BE4, transparent: true, opacity: 0.055, side: THREE.BackSide })
+  );
+
+  // Outer ring at base of V
+  const vRing = new THREE.Mesh(
+    new THREE.TorusGeometry(2.2, 0.035, 6, 96),
+    new THREE.MeshBasicMaterial({ color: 0x2D6BE4, transparent: true, opacity: 0.35 })
+  );
+  vRing.rotation.x = Math.PI / 2;
+  vRing.position.y = -1.65;
+
+  const vGrp = new THREE.Group();
+  vGrp.add(vMesh);
+  vGrp.add(vAura);
+  vGrp.add(vRing);
+  scene.add(vGrp);
+
+  // V pulse rings
+  const vPulse = [0, 0.4, 0.8].map(offset => {
+    const r = new THREE.Mesh(
+      new THREE.TorusGeometry(1, 0.03, 6, 80),
+      new THREE.MeshBasicMaterial({ color: 0x5B8DF0, transparent: true, opacity: 0 })
+    );
+    r.rotation.x = Math.PI / 2;
+    r.position.y = -1.65;
+    vGrp.add(r);
+    return { mesh: r, offset };
+  });
+
+  // ── ORBITING SPHERES ─────────────────────────────────────────────────────
+  function makeSphere(hexColor, r, w, h) {
+    const mat = new THREE.MeshStandardMaterial({
+      color: hexColor, metalness: 0.55, roughness: 0.3,
+      emissive: hexColor, emissiveIntensity: 0.35
+    });
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 22, 22), mat);
+
+    // Glow halo
+    const glow = new THREE.Mesh(
+      new THREE.SphereGeometry(r * 1.55, 16, 16),
+      new THREE.MeshBasicMaterial({ color: hexColor, transparent: true, opacity: 0.07, side: THREE.BackSide })
+    );
+    const grp = new THREE.Group();
+    grp.add(mesh);
+    grp.add(glow);
+    scene.add(grp);
+    return grp;
+  }
+
+  // Orbit ring helper
+  function makeOrbitRing(r, col) {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(r, 0.012, 6, 120),
+      new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.1 })
+    );
+    ring.rotation.x = Math.PI / 2;
+    scene.add(ring);
+    return ring;
+  }
+
+  const SPHERES = [
+    { color: 0xF5A623, r: 0.44, orbitR: 4.8, spd: 0.36, y:  1.0, phase: 0,              name: 'VlogSource' },
+    { color: 0x1a3a8f, r: 0.42, orbitR: 5.4, spd: 0.28, y: -0.8, phase: Math.PI * 0.5,  name: 'Vakeel AI' },
+    { color: 0x10B981, r: 0.46, orbitR: 5.0, spd: 0.33, y:  0.5, phase: Math.PI,        name: 'TaxDraft AI' },
+    { color: 0x38bdf8, r: 0.41, orbitR: 5.7, spd: 0.24, y: -1.2, phase: Math.PI * 1.5,  name: 'TutorAI' },
+  ];
+
+  const orbs = SPHERES.map(d => {
+    const grp = makeSphere(d.color, d.r);
+    makeOrbitRing(d.orbitR, d.color);
+    return { grp, d };
+  });
+
+  // ── PARTICLES ────────────────────────────────────────────────────────────
+  const PC = isMobile ? 1400 : 2800;
+  const pPos = new Float32Array(PC * 3);
+  const pCol = new Float32Array(PC * 3);
+
+  for (let i = 0; i < PC; i++) {
+    const rr = 11 + Math.random() * 22;
+    const theta = Math.random() * Math.PI * 2;
+    const phi   = Math.acos(2 * Math.random() - 1);
+    pPos[i*3]   = rr * Math.sin(phi) * Math.cos(theta);
+    pPos[i*3+1] = rr * Math.sin(phi) * Math.sin(theta) * 0.6;
+    pPos[i*3+2] = rr * Math.cos(phi);
+
+    const rnd = Math.random(), b = 0.35 + Math.random() * 0.65;
+    if (rnd > 0.82) {
+      // Amber
+      pCol[i*3] = 0.96*b; pCol[i*3+1] = 0.65*b; pCol[i*3+2] = 0.14*b;
+    } else if (rnd > 0.55) {
+      // Electric blue
+      pCol[i*3] = 0.18*b; pCol[i*3+1] = 0.42*b; pCol[i*3+2] = 0.89*b;
+    } else {
+      // White/cool
+      pCol[i*3] = b*0.88; pCol[i*3+1] = b*0.9; pCol[i*3+2] = b;
+    }
+  }
+
+  const pGeom = new THREE.BufferGeometry();
+  pGeom.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  pGeom.setAttribute('color',    new THREE.BufferAttribute(pCol, 3));
+  const particles = new THREE.Points(pGeom,
+    new THREE.PointsMaterial({ size: 0.07, vertexColors: true, transparent: true, opacity: 0.8, sizeAttenuation: true })
+  );
+  scene.add(particles);
+
+  // Grid floor
+  const grid = new THREE.GridHelper(36, 36, 0x2D6BE4, 0x080C14);
+  grid.material.transparent = true;
+  grid.material.opacity = 0.07;
+  grid.position.y = -7;
+  scene.add(grid);
+
+  // ── MOUSE PARALLAX ────────────────────────────────────────────────────────
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  window.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  // ── RESIZE ───────────────────────────────────────────────────────────────
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
+  });
+
+  // ── ANIMATE ──────────────────────────────────────────────────────────────
+  const clock = new THREE.Clock();
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    tx += (mx - tx) * 0.03;
+    ty += (my - ty) * 0.03;
+
+    // V logo — full Y rotation + gentle bob
+    vGrp.rotation.y = t * 0.28;
+    vGrp.position.y = Math.sin(t * 0.5) * 0.22;
+
+    // V pulse rings
+    vPulse.forEach(({ mesh, offset }) => {
+      const ph = (t * 0.38 + offset) % 1;
+      mesh.scale.setScalar(1 + ph * 6);
+      mesh.material.opacity = 0.35 * (1 - ph);
+    });
+
+    // Orbiting spheres
+    orbs.forEach(({ grp, d }) => {
+      const a = t * d.spd + d.phase;
+      grp.position.set(
+        Math.cos(a) * d.orbitR,
+        d.y + Math.sin(t * 0.42 + d.phase) * 0.5,
+        Math.sin(a) * d.orbitR
+      );
+      grp.rotation.y = t * 0.8;
+    });
+
+    // Particles slow drift
+    particles.rotation.y = t * 0.014;
+    particles.rotation.x = Math.sin(t * 0.011) * 0.05;
+
+    // Light animation
+    blueKey.position.x = Math.cos(t * 0.28) * 8;
+    blueKey.position.z = Math.sin(t * 0.28) * 6;
+    blueKey.intensity  = 11 + Math.sin(t * 0.55) * 2.5;
+
+    amberFill.position.x = Math.cos(t * 0.2 + Math.PI) * 7;
+    amberFill.intensity   = 4.5 + Math.sin(t * 0.4) * 1.5;
+
+    // Aura pulse
+    vAura.material.opacity = 0.045 + Math.sin(t * 0.44) * 0.02;
+
+    // Camera parallax
+    camera.position.x = tx * 1.2;
+    camera.position.y = -ty * 0.9;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }());
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(initThreeScene);
+  } else {
+    initThreeScene();
+  }
+});
+</script>
+</body>
+</html>
